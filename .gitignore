@@ -3,6 +3,10 @@
 [Oo]bj/
 [Pp]ackages/
 
+# run
+**/input/
+**/output/
+
 # user
 **/*.idea
 **/*.user
