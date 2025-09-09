@@ -1,0 +1,12 @@
+<Project>
+    
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageVersion Include="Spectre.Console" Version="0.51.1" />
+    </ItemGroup>
+    
+</Project>
