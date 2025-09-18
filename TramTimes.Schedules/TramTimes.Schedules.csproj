@@ -5,6 +5,9 @@
     </PropertyGroup>
     
     <ItemGroup>
+        <PackageReference Include="HtmlAgilityPack" />
+        <PackageReference Include="JetBrains.Annotations" />
+        <PackageReference Include="Polly" />
         <PackageReference Include="Spectre.Console" />
     </ItemGroup>
     
