@@ -1,3 +1,5 @@
+// ReSharper disable all
+
 using System.Text.Json;
 using HtmlAgilityPack;
 using Polly;
@@ -167,9 +169,23 @@ public static class ScheduleBuilder
         
         #endregion
         
+        #region check response
+        
+        if (!response.IsSuccessStatusCode)
+            return [];
+        
+        #endregion
+        
         #region build content
         
         var content = await response.Content.ReadAsStringAsync();
+        
+        #endregion
+        
+        #region check content
+        
+        if (string.IsNullOrEmpty(value: content))
+            return [];
         
         #endregion
         
@@ -180,9 +196,23 @@ public static class ScheduleBuilder
         
         #endregion
         
+        #region check document
+        
+        if (document.ParseErrors.Any())
+            return [];
+        
+        #endregion
+        
         #region build rows
         
         var rows = document.DocumentNode.SelectNodes(xpath: "//table//tr[td]");
+        
+        #endregion
+        
+        #region check rows
+        
+        if (rows is null || rows.Count is 0)
+            return [];
         
         #endregion
         
@@ -206,14 +236,6 @@ public static class ScheduleBuilder
             .Where(predicate: service => StringTools.GetTimeRange(departureTime: service.DepartureTime))
             .Distinct()
             .ToList();
-        
-        #endregion
-        
-        #region build delay
-        
-        await Task.Delay(delay: TimeSpanTools.GetJitteredDelay(
-            baseDelay: TimeSpan.FromMilliseconds(milliseconds: 500),
-            jitterRandom: Random));
         
         #endregion
         

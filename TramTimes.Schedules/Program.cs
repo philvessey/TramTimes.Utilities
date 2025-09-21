@@ -19,18 +19,45 @@ AnsiConsole.WriteLine();
 
 #endregion
 
-#region create folders
+#region build data
 
-Directory.CreateDirectory(path: "input");
-Directory.CreateDirectory(path: "output");
+var data = Directory.GetFiles(
+    searchPattern: "*.txt",
+    path: "Data");
 
 #endregion
 
-#region set path
+#region check data
+
+if (data.Length is 0)
+{
+    AnsiConsole.MarkupLine(value: "[red]❌ Error: No data files found in Data directory[/]");
+    AnsiConsole.MarkupLine(value: "[yellow]Please create a text file with stop IDs in the Data directory, one per line[/]");
+    AnsiConsole.WriteLine();
+    
+    return;
+}
+
+#endregion
+
+#region write prompt
+
+var file = AnsiConsole.Prompt(prompt: new SelectionPrompt<string>()
+    .Title(title: "[bold]Select Network:[/]")
+    .AddChoices(choices: data
+        .Select(selector: Path.GetFileName)
+        .OrderBy(keySelector: name => name)
+        .Cast<string>()
+        .ToArray())
+);
+
+#endregion
+
+#region build path
 
 var path = Path.Combine(
-    path1: "input",
-    path2: "stops.txt");
+    path1: "Data",
+    path2: file);
 
 #endregion
 
@@ -72,9 +99,27 @@ AnsiConsole.WriteLine();
 
 var targetDate = DateTimeTools.GetTargetDate(now: DateTime.Now);
 
-AnsiConsole.Write(renderable: new Panel(text: $"[bold]Target:[/] [yellow]{targetDate:yyyy-MM-dd} ({targetDate.DayOfWeek})[/]")
+AnsiConsole.Write(renderable: new Panel(text: $"[bold]Target Date:[/] [yellow]{targetDate:yyyy-MM-dd} ({targetDate.DayOfWeek})[/]")
     .Border(border: BoxBorder.Rounded)
     .BorderColor(color: Color.Blue));
+
+#endregion
+
+#region build output
+
+Directory.CreateDirectory(path: "output");
+
+#endregion
+
+#region check output
+
+if (!Directory.Exists(path: "output"))
+{
+    AnsiConsole.MarkupLine(value: "[red]❌ Error: Could not create output directory[/]");
+    AnsiConsole.WriteLine();
+    
+    return;
+}
 
 #endregion
 
@@ -107,12 +152,5 @@ await AnsiConsole
         task.Description = $"[green]✅ {stops[^1]}[/]";
         task.StopTask();
     });
-
-#endregion
-
-#region write completion
-
-AnsiConsole.MarkupLine(value: "[green]🎉 All stops IDs processed successfully[/]");
-AnsiConsole.WriteLine();
 
 #endregion
