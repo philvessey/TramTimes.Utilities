@@ -4,10 +4,10 @@ using System.Text.Json;
 using HtmlAgilityPack;
 using Polly;
 using Spectre.Console;
-using TramTimes.Schedules.Models;
-using TramTimes.Schedules.Tools;
+using TramTimes.Database.Schedules.Models;
+using TramTimes.Database.Schedules.Tools;
 
-namespace TramTimes.Schedules.Builders;
+namespace TramTimes.Database.Schedules.Builders;
 
 public static class ScheduleBuilder
 {

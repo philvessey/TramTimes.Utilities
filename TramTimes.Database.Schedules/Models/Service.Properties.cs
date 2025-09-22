@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using JetBrains.Annotations;
 
-namespace TramTimes.Schedules.Models;
+namespace TramTimes.Database.Schedules.Models;
 
 public partial class Service
 {

@@ -1,4 +1,4 @@
-namespace TramTimes.Schedules.Models;
+namespace TramTimes.Database.Schedules.Models;
 
 public partial class Service : IEquatable<Service>
 {

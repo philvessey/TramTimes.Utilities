@@ -1,4 +1,4 @@
-namespace TramTimes.Schedules.Builders;
+namespace TramTimes.Database.Schedules.Builders;
 
 public static class StopBuilder
 {

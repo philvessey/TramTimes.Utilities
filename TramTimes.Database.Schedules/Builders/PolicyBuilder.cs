@@ -1,7 +1,7 @@
 using Polly;
-using TramTimes.Schedules.Tools;
+using TramTimes.Database.Schedules.Tools;
 
-namespace TramTimes.Schedules.Builders;
+namespace TramTimes.Database.Schedules.Builders;
 
 public static class PolicyBuilder
 {

@@ -1,12 +1,12 @@
 ﻿using Spectre.Console;
-using TramTimes.Schedules.Builders;
-using TramTimes.Schedules.Tools;
+using TramTimes.Database.Schedules.Builders;
+using TramTimes.Database.Schedules.Tools;
 
 var random = new Random();
 
 #region write banner
 
-AnsiConsole.Write(renderable: new FigletText(text: "Schedules")
+AnsiConsole.Write(renderable: new FigletText(text: "TramTimes")
     .Color(color: Color.Blue)
     .LeftJustified());
 

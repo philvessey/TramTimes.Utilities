@@ -1,4 +1,4 @@
-namespace TramTimes.Schedules.Tools;
+namespace TramTimes.Database.Schedules.Tools;
 
 public static class TimeSpanTools
 {

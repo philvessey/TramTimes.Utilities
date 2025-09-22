@@ -5,6 +5,6 @@
         <File Path="Directory.Packages.props" />
     </Folder>
     
-    <Project Path="TramTimes.Schedules/TramTimes.Schedules.csproj" />
+    <Project Path="TramTimes.Database.Schedules\TramTimes.Database.Schedules.csproj" />
     
 </Solution>
