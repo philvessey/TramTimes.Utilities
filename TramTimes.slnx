@@ -4,6 +4,7 @@
         <File Path="Directory.Build.props" />
         <File Path="Directory.Packages.props" />
         <File Path="LICENSE" />
+        <File Path="README.md" />
     </Folder>
     
     <Project Path="TramTimes.Database.Schedules\TramTimes.Database.Schedules.csproj" />
