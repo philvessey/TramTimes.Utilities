@@ -8,5 +8,6 @@
     </Folder>
     
     <Project Path="TramTimes.Database.Schedules\TramTimes.Database.Schedules.csproj" />
+    <Project Path="TramTimes.Database.Stops\TramTimes.Database.Stops.csproj" />
     
 </Solution>
