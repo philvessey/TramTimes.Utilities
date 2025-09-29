@@ -7,6 +7,7 @@
         <File Path="README.md" />
     </Folder>
     
+    <Project Path="TramTimes.Cache.Stops\TramTimes.Cache.Stops.csproj" />
     <Project Path="TramTimes.Database.Schedules\TramTimes.Database.Schedules.csproj" />
     <Project Path="TramTimes.Database.Stops\TramTimes.Database.Stops.csproj" />
     

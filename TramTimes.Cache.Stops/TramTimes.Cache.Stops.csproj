@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Spectre.Console" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Remove="output\**" />
+    </ItemGroup>
+
+</Project>
