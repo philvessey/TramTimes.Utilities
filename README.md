@@ -8,6 +8,12 @@ A .NET console application that creates structured JSON files with
 weekly schedules for tram stops. The schedules are used to test the 
 output of the database builder.
 
+### [Database.Stops](./TramTimes.Database.Stops/README.md)
+
+A .NET console application that creates C# quartz jobs from a template 
+for tram stops. The jobs are used to test the output of the database 
+builder.
+
 ## License
 
 These projects are licensed under the MIT License - see 
