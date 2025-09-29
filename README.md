@@ -2,6 +2,11 @@
 
 A collection of .NET support utilities for TramTimes projects.
 
+### [Cache.Stops](./TramTimes.Cache.Stops/README.md)
+
+A .NET console application that creates C# quartz jobs from a template 
+for tram stops. The jobs are used to cache service and trip data.
+
 ### [Database.Schedules](./TramTimes.Database.Schedules/README.md)
 
 A .NET console application that creates structured JSON files with 
