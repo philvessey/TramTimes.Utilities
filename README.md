@@ -19,6 +19,11 @@ A .NET console application that creates C# quartz jobs from a template
 for tram stops. The jobs are used to test the output of the database 
 builder.
 
+### [Search.Stops](./TramTimes.Search.Stops/README.md)
+
+A .NET console application that creates C# quartz jobs from a template
+for tram stops. The jobs are used to index stop and service data.
+
 ## License
 
 These projects are licensed under the MIT License - see 
