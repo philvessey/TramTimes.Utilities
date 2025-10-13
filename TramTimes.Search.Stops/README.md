@@ -103,7 +103,7 @@ public class _9400ZZSYMAL1(
             var serviceResults = await databaseFeed.GetServicesByStopAsync(
                 id: "9400ZZSYMAL1",
                 comparison: ComparisonType.Exact,
-                tolerance: TimeSpan.FromMinutes(value: 119));
+                tolerance: TimeSpan.FromMinutes(value: 179));
             
             var databaseResults = mapper.Map<List<SearchStop>>(source: stopResults).FirstOrDefault() ?? new SearchStop();
             databaseResults.Points = mapper.Map<List<SearchStopPoint>>(source: serviceResults) ?? [];

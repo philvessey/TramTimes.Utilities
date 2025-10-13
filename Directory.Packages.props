@@ -6,10 +6,10 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageVersion Include="HtmlAgilityPack" Version="1.12.2" />
+        <PackageVersion Include="HtmlAgilityPack" Version="1.12.4" />
         <PackageVersion Include="JetBrains.Annotations" Version="2025.2.2" />
-        <PackageVersion Include="Polly" Version="8.6.3" />
-        <PackageVersion Include="Spectre.Console" Version="0.51.1" />
+        <PackageVersion Include="Polly" Version="8.6.4" />
+        <PackageVersion Include="Spectre.Console" Version="0.52.0" />
     </ItemGroup>
     
 </Project>

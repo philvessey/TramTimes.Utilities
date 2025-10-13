@@ -75,7 +75,7 @@ public class _{{STOP}}(
             var serviceResults = await databaseFeed.GetServicesByStopAsync(
                 id: "{{STOP}}",
                 comparison: ComparisonType.Exact,
-                tolerance: TimeSpan.FromMinutes(value: 119));
+                tolerance: TimeSpan.FromMinutes(value: 179));
             
             var databaseResults = mapper.Map<List<SearchStop>>(source: stopResults).FirstOrDefault() ?? new SearchStop();
             databaseResults.Points = mapper.Map<List<SearchStopPoint>>(source: serviceResults) ?? [];
