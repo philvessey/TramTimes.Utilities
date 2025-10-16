@@ -41,7 +41,7 @@ using TramTimes.Cache.Jobs.Models;
 namespace TramTimes.Cache.Jobs.Workers.Stops;
 
 public class _9400ZZSYMAL1(
-    BlobContainerClient blobService,
+    BlobContainerClient containerClient,
     NpgsqlDataSource dataSource,
     IConnectionMultiplexer cacheService,
     ILogger<_9400ZZSYMAL1> logger,
@@ -157,7 +157,7 @@ public class _9400ZZSYMAL1(
                 path3: "get",
                 path4: "9400ZZSYMAL1.json");
             
-            await blobService
+            await containerClient
                 .GetBlobClient(blobName: remotePath)
                 .UploadAsync(
                     path: localPath,
@@ -189,7 +189,7 @@ public class _9400ZZSYMAL1(
                 path3: "set",
                 path4: "9400ZZSYMAL1.json");
             
-            await blobService
+            await containerClient
                 .GetBlobClient(blobName: remotePath)
                 .UploadAsync(
                     path: localPath,
