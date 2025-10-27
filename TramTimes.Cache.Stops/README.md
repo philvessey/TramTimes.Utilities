@@ -28,8 +28,6 @@ The application generates C# quartz jobs with the following structure:
 ```csharp
 using System.Text.Json;
 using AutoMapper;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using NextDepartures.Standard;
 using NextDepartures.Standard.Types;
 using NextDepartures.Storage.Postgres.Aspire;
@@ -41,22 +39,13 @@ using TramTimes.Cache.Jobs.Models;
 namespace TramTimes.Cache.Jobs.Workers.Stops;
 
 public class _9400ZZSYMAL1(
-    BlobContainerClient containerClient,
     NpgsqlDataSource dataSource,
     IConnectionMultiplexer cacheService,
     ILogger<_9400ZZSYMAL1> logger,
     IMapper mapper) : IJob {
     
-    private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
-    
     public async Task Execute(IJobExecutionContext context)
     {
-        var guid = Guid.NewGuid();
-        
-        var storage = Directory.CreateDirectory(path: Path.Combine(
-            path1: Path.GetTempPath(),
-            path2: guid.ToString()));
-        
         try
         {
             #region get cache feed
@@ -76,7 +65,7 @@ public class _9400ZZSYMAL1(
             
             #region check cache feed
             
-            if (mappedResults.FirstOrDefault()?.DepartureDateTime > DateTime.Now)
+            if (mappedResults.FirstOrDefault()?.DepartureDateTime >= DateTime.Now)
                 return;
             
             #endregion
@@ -138,80 +127,12 @@ public class _9400ZZSYMAL1(
             }
             
             #endregion
-            
-            #region build cache results
-            
-            var localPath = Path.Combine(
-                path1: storage.FullName,
-                path2: "9400ZZSYMAL1.json");
-            
-            await File.WriteAllTextAsync(
-                path: localPath,
-                contents: JsonSerializer.Serialize(
-                    value: mapper.Map<List<WorkerStopPoint>>(source: mappedResults),
-                    options: Options));
-            
-            var remotePath = Path.Combine(
-                path1: "cache",
-                path2: context.FireTimeUtc.DateTime.ToString(format: "yyyyMMddHHmm"),
-                path3: "get",
-                path4: "9400ZZSYMAL1.json");
-            
-            await containerClient
-                .GetBlobClient(blobName: remotePath)
-                .UploadAsync(
-                    path: localPath,
-                    options: new BlobUploadOptions
-                    {
-                        HttpHeaders = new BlobHttpHeaders
-                        {
-                            ContentType = "application/json"
-                        }
-                    });
-            
-            #endregion
-            
-            #region build database results
-            
-            localPath = Path.Combine(
-                path1: storage.FullName,
-                path2: "9400ZZSYMAL1.json");
-            
-            await File.WriteAllTextAsync(
-                path: localPath,
-                contents: JsonSerializer.Serialize(
-                    value: mapper.Map<List<WorkerStopPoint>>(source: databaseResults),
-                    options: Options));
-            
-            remotePath = Path.Combine(
-                path1: "cache",
-                path2: context.FireTimeUtc.DateTime.ToString(format: "yyyyMMddHHmm"),
-                path3: "set",
-                path4: "9400ZZSYMAL1.json");
-            
-            await containerClient
-                .GetBlobClient(blobName: remotePath)
-                .UploadAsync(
-                    path: localPath,
-                    options: new BlobUploadOptions
-                    {
-                        HttpHeaders = new BlobHttpHeaders
-                        {
-                            ContentType = "application/json"
-                        }
-                    });
-            
-            #endregion
         }
         catch (Exception e)
         {
             logger.LogError(
                 message: "Exception: {exception}",
                 args: e.ToString());
-        }
-        finally
-        {
-            storage.Delete(recursive: true);
         }
     }
 }

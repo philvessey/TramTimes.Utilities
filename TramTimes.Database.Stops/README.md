@@ -28,12 +28,10 @@ The application generates C# quartz jobs with the following structure:
 
 ```csharp
 using System.Text.Json;
-using AutoMapper;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using NextDepartures.Standard;
 using NextDepartures.Standard.Types;
-using NextDepartures.Storage.GTFS;
 using NextDepartures.Storage.Postgres.Aspire;
 using Npgsql;
 using Quartz;
@@ -44,8 +42,7 @@ namespace TramTimes.Database.Jobs.Workers.Stops;
 public class _9400ZZSYMAL1(
     BlobContainerClient containerClient,
     NpgsqlDataSource dataSource,
-    ILogger<_9400ZZSYMAL1> logger,
-    IMapper mapper) : IJob {
+    ILogger<_9400ZZSYMAL1> logger) : IJob {
     
     private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
     
@@ -59,19 +56,6 @@ public class _9400ZZSYMAL1(
         
         try
         {
-            #region get active blobs
-            
-            var activeBlobs = containerClient.GetBlobsAsync(prefix: $"database/{context.FireTimeUtc.Date:yyyyMMdd}/gtfs");
-            
-            await foreach (var item in activeBlobs)
-                await containerClient
-                    .GetBlobClient(item.Name)
-                    .DownloadToAsync(path: Path.Combine(
-                        path1: storage.FullName,
-                        path2: Path.GetFileName(path: item.Name)));
-            
-            #endregion
-            
             #region get stop schedule
             
             var activeSchedule = JsonSerializer.Deserialize<WorkerSchedule>(json: await File.ReadAllTextAsync(path: Path.Combine(
@@ -86,19 +70,6 @@ public class _9400ZZSYMAL1(
             var databaseFeed = await Feed.LoadAsync(dataStorage: PostgresStorage.Load(dataSource: dataSource));
             
             var databaseResults = await databaseFeed.GetServicesByStopAsync(
-                id: "9400ZZSYMAL1",
-                target: context.FireTimeUtc.Date,
-                offset: TimeSpan.FromHours(value: 12),
-                comparison: ComparisonType.Exact,
-                tolerance: TimeSpan.FromMinutes(value: 59));
-            
-            #endregion
-            
-            #region get storage feed
-            
-            var storageFeed = await Feed.LoadAsync(dataStorage: GtfsStorage.Load(path: storage.FullName));
-            
-            var storageResults = await storageFeed.GetServicesByStopAsync(
                 id: "9400ZZSYMAL1",
                 target: context.FireTimeUtc.Date,
                 offset: TimeSpan.FromHours(value: 12),
@@ -168,67 +139,6 @@ public class _9400ZZSYMAL1(
             
             #endregion
             
-            #region check storage feed
-            
-            switch (context.FireTimeUtc.Date.DayOfWeek)
-            {
-                case DayOfWeek.Monday:
-                {
-                    if (storageResults.Count != activeSchedule?.Monday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Storage service count does not match schedule");
-                    
-                    break;
-                }
-                case DayOfWeek.Tuesday:
-                {
-                    if (storageResults.Count != activeSchedule?.Tuesday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Storage service count does not match schedule");
-                    
-                    break;
-                }
-                case DayOfWeek.Wednesday:
-                {
-                    if (storageResults.Count != activeSchedule?.Wednesday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Storage service count does not match schedule");
-                    
-                    break;
-                }
-                case DayOfWeek.Thursday:
-                {
-                    if (storageResults.Count != activeSchedule?.Thursday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Storage service count does not match schedule");
-                    
-                    break;
-                }
-                case DayOfWeek.Friday:
-                {
-                    if (storageResults.Count != activeSchedule?.Friday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Storage service count does not match schedule");
-                    
-                    break;
-                }
-                case DayOfWeek.Saturday:
-                {
-                    if (storageResults.Count != activeSchedule?.Saturday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Storage service count does not match schedule");
-                    
-                    break;
-                }
-                case DayOfWeek.Sunday:
-                {
-                    if (storageResults.Count != activeSchedule?.Sunday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Storage service count does not match schedule");
-                    
-                    break;
-                }
-                default:
-                    logger.LogWarning(message: "9400ZZSYMAL1: Storage service count does not match schedule");
-                    
-                    break;
-            }
-            
-            #endregion
-            
             #region process test results
             
             List<WorkerStopPoint> testResults = [];
@@ -245,30 +155,18 @@ public class _9400ZZSYMAL1(
                             RouteName = "unknown"
                         };
                         
-                        var databaseDepartureTime = "unknown";
-                        var storageDepartureTime = "unknown";
+                        var departureTime = "unknown";
+                        var routeName = "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseDepartureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageDepartureTime = storageResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        var databaseRouteName = "unknown";
-                        var storageRouteName = "unknown";
+                            departureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseRouteName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageRouteName = storageResults.ElementAt(index: i).RouteName ?? "unknown";
+                            routeName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is null ||
-                            storageResults.ElementAtOrDefault(index: i) is null ||
-                            !databaseDepartureTime.Equals(value: value.DepartureTime) ||
-                            !storageDepartureTime.Equals(value: value.DepartureTime) ||
-                            !databaseRouteName.Equals(value: value.RouteName) ||
-                            !storageRouteName.Equals(value: value.RouteName)) {
+                            !departureTime.Equals(value: value.DepartureTime) ||
+                            !routeName.Equals(value: value.RouteName)){
                             
                             testResults.Add(item: value);
                         }
@@ -286,30 +184,18 @@ public class _9400ZZSYMAL1(
                             RouteName = "unknown"
                         };
                         
-                        var databaseDepartureTime = "unknown";
-                        var storageDepartureTime = "unknown";
+                        var departureTime = "unknown";
+                        var routeName = "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseDepartureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageDepartureTime = storageResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        var databaseRouteName = "unknown";
-                        var storageRouteName = "unknown";
+                            departureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseRouteName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageRouteName = storageResults.ElementAt(index: i).RouteName ?? "unknown";
+                            routeName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is null ||
-                            storageResults.ElementAtOrDefault(index: i) is null ||
-                            !databaseDepartureTime.Equals(value: value.DepartureTime) ||
-                            !storageDepartureTime.Equals(value: value.DepartureTime) ||
-                            !databaseRouteName.Equals(value: value.RouteName) ||
-                            !storageRouteName.Equals(value: value.RouteName)) {
+                            !departureTime.Equals(value: value.DepartureTime) ||
+                            !routeName.Equals(value: value.RouteName)) {
                             
                             testResults.Add(item: value);
                         }
@@ -327,30 +213,18 @@ public class _9400ZZSYMAL1(
                             RouteName = "unknown"
                         };
                         
-                        var databaseDepartureTime = "unknown";
-                        var storageDepartureTime = "unknown";
+                        var departureTime = "unknown";
+                        var routeName = "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseDepartureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageDepartureTime = storageResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        var databaseRouteName = "unknown";
-                        var storageRouteName = "unknown";
+                            departureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseRouteName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageRouteName = storageResults.ElementAt(index: i).RouteName ?? "unknown";
+                            routeName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is null ||
-                            storageResults.ElementAtOrDefault(index: i) is null ||
-                            !databaseDepartureTime.Equals(value: value.DepartureTime) ||
-                            !storageDepartureTime.Equals(value: value.DepartureTime) ||
-                            !databaseRouteName.Equals(value: value.RouteName) ||
-                            !storageRouteName.Equals(value: value.RouteName)) {
+                            !departureTime.Equals(value: value.DepartureTime) ||
+                            !routeName.Equals(value: value.RouteName)) {
                             
                             testResults.Add(item: value);
                         }
@@ -368,30 +242,18 @@ public class _9400ZZSYMAL1(
                             RouteName = "unknown"
                         };
                         
-                        var databaseDepartureTime = "unknown";
-                        var storageDepartureTime = "unknown";
+                        var departureTime = "unknown";
+                        var routeName = "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseDepartureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageDepartureTime = storageResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        var databaseRouteName = "unknown";
-                        var storageRouteName = "unknown";
+                            departureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseRouteName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageRouteName = storageResults.ElementAt(index: i).RouteName ?? "unknown";
+                            routeName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is null ||
-                            storageResults.ElementAtOrDefault(index: i) is null ||
-                            !databaseDepartureTime.Equals(value: value.DepartureTime) ||
-                            !storageDepartureTime.Equals(value: value.DepartureTime) ||
-                            !databaseRouteName.Equals(value: value.RouteName) ||
-                            !storageRouteName.Equals(value: value.RouteName)) {
+                            !departureTime.Equals(value: value.DepartureTime) ||
+                            !routeName.Equals(value: value.RouteName)) {
                             
                             testResults.Add(item: value);
                         }
@@ -409,30 +271,18 @@ public class _9400ZZSYMAL1(
                             RouteName = "unknown"
                         };
                         
-                        var databaseDepartureTime = "unknown";
-                        var storageDepartureTime = "unknown";
+                        var departureTime = "unknown";
+                        var routeName = "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseDepartureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageDepartureTime = storageResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        var databaseRouteName = "unknown";
-                        var storageRouteName = "unknown";
+                            departureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseRouteName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageRouteName = storageResults.ElementAt(index: i).RouteName ?? "unknown";
+                            routeName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is null ||
-                            storageResults.ElementAtOrDefault(index: i) is null ||
-                            !databaseDepartureTime.Equals(value: value.DepartureTime) ||
-                            !storageDepartureTime.Equals(value: value.DepartureTime) ||
-                            !databaseRouteName.Equals(value: value.RouteName) ||
-                            !storageRouteName.Equals(value: value.RouteName)) {
+                            !departureTime.Equals(value: value.DepartureTime) ||
+                            !routeName.Equals(value: value.RouteName)) {
                             
                             testResults.Add(item: value);
                         }
@@ -450,30 +300,18 @@ public class _9400ZZSYMAL1(
                             RouteName = "unknown"
                         };
                         
-                        var databaseDepartureTime = "unknown";
-                        var storageDepartureTime = "unknown";
+                        var departureTime = "unknown";
+                        var routeName = "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseDepartureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageDepartureTime = storageResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        var databaseRouteName = "unknown";
-                        var storageRouteName = "unknown";
+                            departureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseRouteName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageRouteName = storageResults.ElementAt(index: i).RouteName ?? "unknown";
+                            routeName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is null ||
-                            storageResults.ElementAtOrDefault(index: i) is null ||
-                            !databaseDepartureTime.Equals(value: value.DepartureTime) ||
-                            !storageDepartureTime.Equals(value: value.DepartureTime) ||
-                            !databaseRouteName.Equals(value: value.RouteName) ||
-                            !storageRouteName.Equals(value: value.RouteName)) {
+                            !departureTime.Equals(value: value.DepartureTime) ||
+                            !routeName.Equals(value: value.RouteName)) {
                             
                             testResults.Add(item: value);
                         }
@@ -491,30 +329,18 @@ public class _9400ZZSYMAL1(
                             RouteName = "unknown"
                         };
                         
-                        var databaseDepartureTime = "unknown";
-                        var storageDepartureTime = "unknown";
+                        var departureTime = "unknown";
+                        var routeName = "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseDepartureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageDepartureTime = storageResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
-                        
-                        var databaseRouteName = "unknown";
-                        var storageRouteName = "unknown";
+                            departureTime = databaseResults.ElementAt(index: i).DepartureTime.ToString() ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is not null)
-                            databaseRouteName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
-                        
-                        if (storageResults.ElementAtOrDefault(index: i) is not null)
-                            storageRouteName = storageResults.ElementAt(index: i).RouteName ?? "unknown";
+                            routeName = databaseResults.ElementAt(index: i).RouteName ?? "unknown";
                         
                         if (databaseResults.ElementAtOrDefault(index: i) is null ||
-                            storageResults.ElementAtOrDefault(index: i) is null ||
-                            !databaseDepartureTime.Equals(value: value.DepartureTime) ||
-                            !storageDepartureTime.Equals(value: value.DepartureTime) ||
-                            !databaseRouteName.Equals(value: value.RouteName) ||
-                            !storageRouteName.Equals(value: value.RouteName)) {
+                            !departureTime.Equals(value: value.DepartureTime) ||
+                            !routeName.Equals(value: value.RouteName)) {
                             
                             testResults.Add(item: value);
                         }
@@ -530,73 +356,9 @@ public class _9400ZZSYMAL1(
             
             #endregion
             
-            #region build database results
-            
-            var localPath = Path.Combine(
-                path1: storage.FullName,
-                path2: "9400ZZSYMAL1.json");
-            
-            await File.WriteAllTextAsync(
-                path: localPath,
-                contents: JsonSerializer.Serialize(
-                    value: mapper.Map<List<WorkerStopPoint>>(source: databaseResults),
-                    options: Options));
-            
-            var remotePath = Path.Combine(
-                path1: "database",
-                path2: context.FireTimeUtc.Date.ToString(format: "yyyyMMdd"),
-                path3: "record",
-                path4: "9400ZZSYMAL1.json");
-            
-            await containerClient
-                .GetBlobClient(blobName: remotePath)
-                .UploadAsync(
-                    path: localPath,
-                    options: new BlobUploadOptions
-                    {
-                        HttpHeaders = new BlobHttpHeaders
-                        {
-                            ContentType = "application/json"
-                        }
-                    });
-            
-            #endregion
-            
-            #region build storage results
-            
-            localPath = Path.Combine(
-                path1: storage.FullName,
-                path2: "9400ZZSYMAL1.json");
-            
-            await File.WriteAllTextAsync(
-                path: localPath,
-                contents: JsonSerializer.Serialize(
-                    value: mapper.Map<List<WorkerStopPoint>>(source: storageResults),
-                    options: Options));
-            
-            remotePath = Path.Combine(
-                path1: "database",
-                path2: context.FireTimeUtc.Date.ToString(format: "yyyyMMdd"),
-                path3: "service",
-                path4: "9400ZZSYMAL1.json");
-            
-            await containerClient
-                .GetBlobClient(blobName: remotePath)
-                .UploadAsync(
-                    path: localPath,
-                    options: new BlobUploadOptions
-                    {
-                        HttpHeaders = new BlobHttpHeaders
-                        {
-                            ContentType = "application/json"
-                        }
-                    });
-            
-            #endregion
-            
             #region build test results
             
-            localPath = Path.Combine(
+            var localPath = Path.Combine(
                 path1: storage.FullName,
                 path2: "9400ZZSYMAL1.json");
             
@@ -606,14 +368,10 @@ public class _9400ZZSYMAL1(
                     value: testResults,
                     options: Options));
             
-            remotePath = Path.Combine(
-                path1: "database",
-                path2: context.FireTimeUtc.Date.ToString(format: "yyyyMMdd"),
-                path3: "test",
-                path4: "9400ZZSYMAL1.json");
-            
             await containerClient
-                .GetBlobClient(blobName: remotePath)
+                .GetBlobClient(blobName: Path.Combine(
+                    path1: "database",
+                    path2: "9400ZZSYMAL1.json"))
                 .UploadAsync(
                     path: localPath,
                     options: new BlobUploadOptions
@@ -623,12 +381,6 @@ public class _9400ZZSYMAL1(
                             ContentType = "application/json"
                         }
                     });
-            
-            #endregion
-            
-            #region delete job
-            
-            await context.Scheduler.DeleteJob(jobKey: context.JobDetail.Key);
             
             #endregion
         }
