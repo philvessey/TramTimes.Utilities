@@ -24,7 +24,7 @@ public class _{{STOP}}(
             
             var cacheFeed = await cacheService
                 .GetDatabase()
-                .StringGetAsync(key: "southyorkshire:stop:{{STOP}}");
+                .StringGetAsync(key: "{{NETWORK}}:stop:{{STOP}}");
             
             List<CacheStopPoint> mappedResults = [];
             
@@ -47,7 +47,7 @@ public class _{{STOP}}(
             if (mappedResults.LastOrDefault()?.DepartureDateTime < DateTime.Now)
                 await cacheService
                     .GetDatabase()
-                    .KeyDeleteAsync(key: "southyorkshire:stop:{{STOP}}");
+                    .KeyDeleteAsync(key: "{{NETWORK}}:stop:{{STOP}}");
             
             #endregion
             
@@ -67,7 +67,7 @@ public class _{{STOP}}(
             await cacheService
                 .GetDatabase()
                 .StringSetAsync(
-                    key: "southyorkshire:stop:{{STOP}}",
+                    key: "{{NETWORK}}:stop:{{STOP}}",
                     value: JsonSerializer.Serialize(value: mapper.Map<List<WorkerStopPoint>>(source: databaseResults)),
                     expiry: TimeSpan.FromMinutes(value: 179));
             
@@ -93,7 +93,7 @@ public class _{{STOP}}(
                 await cacheService
                     .GetDatabase()
                     .StringSetAsync(
-                        key: $"southyorkshire:trip:{item}",
+                        key: $"{{NETWORK}}:trip:{item}",
                         value: JsonSerializer.Serialize(value: mapper.Map<List<WorkerStopPoint>>(source: databaseResults)),
                         expiry: TimeSpan.FromMinutes(value: 359));
             }

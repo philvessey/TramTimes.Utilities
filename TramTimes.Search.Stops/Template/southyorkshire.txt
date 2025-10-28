@@ -24,7 +24,7 @@ public class _{{STOP}}(
             var searchFeed = await searchService.GetAsync<SearchStop>(request: new GetRequest
             {
                 Id = "{{STOP}}",
-                Index = "southyorkshire"
+                Index = "{{NETWORK}}"
             });
             
             List<SearchStopPoint> mappedResults = [];
@@ -47,7 +47,7 @@ public class _{{STOP}}(
                 await searchService.DeleteAsync(request: new DeleteRequest
                 {
                     Id = "{{STOP}}",
-                    Index = "southyorkshire"
+                    Index = "{{NETWORK}}"
                 });
             
             #endregion
@@ -87,7 +87,7 @@ public class _{{STOP}}(
             {
                 Document = databaseResults,
                 Id = databaseResults.Id ?? "{{STOP}}",
-                Index = "southyorkshire"
+                Index = "{{NETWORK}}"
             });
             
             #endregion

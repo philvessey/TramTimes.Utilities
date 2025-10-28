@@ -137,6 +137,10 @@ await AnsiConsole
             path1: "Template",
             path2: Path.GetFileName(path: path)));
         
+        template = template.Replace(
+            oldValue: "{{NETWORK}}",
+            newValue: Path.GetFileNameWithoutExtension(path: path));
+        
         foreach (var stop in stops)
         {
             task.Description = $"[yellow]⏱️  {stop}[/]";
