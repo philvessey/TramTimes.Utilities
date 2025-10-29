@@ -370,7 +370,7 @@ public class _9400ZZSYMAL1(
             
             await containerClient
                 .GetBlobClient(blobName: Path.Combine(
-                    path1: "database",
+                    path1: "schedules",
                     path2: "9400ZZSYMAL1.json"))
                 .UploadAsync(
                     path: localPath,

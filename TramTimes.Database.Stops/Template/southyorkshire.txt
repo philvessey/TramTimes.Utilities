@@ -341,7 +341,7 @@ public class _{{STOP}}(
             
             await containerClient
                 .GetBlobClient(blobName: Path.Combine(
-                    path1: "database",
+                    path1: "schedules",
                     path2: "{{STOP}}.json"))
                 .UploadAsync(
                     path: localPath,
