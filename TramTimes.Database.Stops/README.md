@@ -85,54 +85,54 @@ public class _9400ZZSYMAL1(
                 case DayOfWeek.Monday:
                 {
                     if (databaseResults.Count != activeSchedule?.Monday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Database service count does not match schedule");
+                        logger.LogWarning(message: "9400ZZSYMAL1: Service count does not match schedule");
                     
                     break;
                 }
                 case DayOfWeek.Tuesday:
                 {
                     if (databaseResults.Count != activeSchedule?.Tuesday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Database service count does not match schedule");
+                        logger.LogWarning(message: "9400ZZSYMAL1: Service count does not match schedule");
                     
                     break;
                 }
                 case DayOfWeek.Wednesday:
                 {
                     if (databaseResults.Count != activeSchedule?.Wednesday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Database service count does not match schedule");
+                        logger.LogWarning(message: "9400ZZSYMAL1: Service count does not match schedule");
                     
                     break;
                 }
                 case DayOfWeek.Thursday:
                 {
                     if (databaseResults.Count != activeSchedule?.Thursday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Database service count does not match schedule");
+                        logger.LogWarning(message: "9400ZZSYMAL1: Service count does not match schedule");
                     
                     break;
                 }
                 case DayOfWeek.Friday:
                 {
                     if (databaseResults.Count != activeSchedule?.Friday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Database service count does not match schedule");
+                        logger.LogWarning(message: "9400ZZSYMAL1: Service count does not match schedule");
                     
                     break;
                 }
                 case DayOfWeek.Saturday:
                 {
                     if (databaseResults.Count != activeSchedule?.Saturday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Database service count does not match schedule");
+                        logger.LogWarning(message: "9400ZZSYMAL1: Service count does not match schedule");
                     
                     break;
                 }
                 case DayOfWeek.Sunday:
                 {
                     if (databaseResults.Count != activeSchedule?.Sunday?.Count)
-                        logger.LogWarning(message: "9400ZZSYMAL1: Database service count does not match schedule");
+                        logger.LogWarning(message: "9400ZZSYMAL1: Service count does not match schedule");
                     
                     break;
                 }
                 default:
-                    logger.LogWarning(message: "9400ZZSYMAL1: Database service count does not match schedule");
+                    logger.LogWarning(message: "9400ZZSYMAL1: Service count does not match schedule");
                     
                     break;
             }
