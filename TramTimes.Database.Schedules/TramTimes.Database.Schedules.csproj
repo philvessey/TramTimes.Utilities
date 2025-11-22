@@ -14,7 +14,13 @@
     <ItemGroup>
         <Compile Remove="output\**" />
         <Content Remove="output\**" />
+    </ItemGroup>
+    
+    <ItemGroup>
         <EmbeddedResource Remove="output\**" />
+    </ItemGroup>
+    
+    <ItemGroup>
         <None Remove="output\**" />
     </ItemGroup>
     
