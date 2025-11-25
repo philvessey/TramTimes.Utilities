@@ -1,8 +1,19 @@
 ﻿using Spectre.Console;
 using TramTimes.Search.Stops.Builders;
+using TramTimes.Search.Stops.Extensions;
 using TramTimes.Search.Stops.Tools;
 
 var random = new Random();
+
+#region listen cancel
+
+Console.CancelKeyPress += (_, _) =>
+{
+    Console.Clear();
+    Console.CursorVisible = true;
+};
+
+#endregion
 
 #region write banner
 
@@ -32,7 +43,7 @@ var data = Directory.GetFiles(
 if (data.Length is 0)
 {
     AnsiConsole.MarkupLine(value: "[red]❌ Error: No data files found in Data directory[/]");
-    AnsiConsole.MarkupLine(value: "[yellow]Please create a text file with stop IDs in the Data directory, one per line[/]");
+    AnsiConsole.MarkupLine(value: "[yellow]Please create a text file with stop ids in the Data directory, one per line[/]");
     AnsiConsole.WriteLine();
     
     return;
@@ -43,7 +54,7 @@ if (data.Length is 0)
 #region write prompt
 
 var file = AnsiConsole.Prompt(prompt: new SelectionPrompt<string>()
-    .Title(title: "[bold]Select Network:[/]")
+    .Title(title: "[bold]Select network:[/]")
     .AddChoices(choices: data
         .Select(selector: Path.GetFileName)
         .OrderBy(keySelector: name => name)
@@ -66,7 +77,7 @@ var path = Path.Combine(
 if (!File.Exists(path: path))
 {
     AnsiConsole.MarkupLine(value: $"[red]❌ Error: {path} not found[/]");
-    AnsiConsole.MarkupLine(value: $"[yellow]Please create a text file with stop IDs at {path}, one per line[/]");
+    AnsiConsole.MarkupLine(value: $"[yellow]Please create a text file with stop ids at {path}, one per line[/]");
     AnsiConsole.WriteLine();
     
     return;
@@ -84,14 +95,84 @@ var stops = await StopBuilder.BuildAsync(path: path);
 
 if (stops.Length is 0)
 {
-    AnsiConsole.MarkupLine(value: $"[red]❌ Error: No valid stop IDs found in {path}[/]");
+    AnsiConsole.MarkupLine(value: $"[red]❌ Error: No valid stop ids found in {path}[/]");
+    AnsiConsole.MarkupLine(value: "[yellow]Please ensure the file contains valid stop ids, one per line[/]");
     AnsiConsole.WriteLine();
     
     return;
 }
 
-AnsiConsole.MarkupLine(value: $"[green]✅ Found {stops.Length} stop IDs to process[/]");
+#endregion
+
+#region write prompt
+
+var term = AnsiConsole.Prompt(prompt: new TextPrompt<string>(prompt: "[bold]Enter search term (or leave blank for all):[/]")
+    .ValidationErrorMessage(message: "[red]❌ Error: Invalid search term[/]")
+    .AllowEmpty());
+
+AnsiConsole.Cursor.MoveUp(steps: 1);
+AnsiConsole.WriteLine(value: new string(c: ' ', count: Console.WindowWidth));
+AnsiConsole.Cursor.MoveUp(steps: 1);
+
+#endregion
+
+#region build choices
+
+var filtered = !string.IsNullOrEmpty(value: term)
+    ? stops.Where(predicate: id => id.ContainsIgnoreCase(value: term))
+    : stops;
+
+var choices = filtered as string[] ?? filtered.ToArray();
+
+#endregion
+
+#region check choices
+
+if (choices.Length is 0)
+{
+    AnsiConsole.MarkupLine(value: $"[red]❌ Error: No stop ids found matching '{term}'[/]");
+    AnsiConsole.MarkupLine(value: "[yellow]Please try a different search term or leave blank to select all[/]");
+    AnsiConsole.WriteLine();
+    
+    return;
+}
+
+#endregion
+
+#region write prompt
+
+var prompt = new MultiSelectionPrompt<string>()
+    .Title(title: "[bold]Select stop ids to process:[/]")
+    .AddChoices(choices: choices)
+    .WrapAround();
+
+if (string.IsNullOrEmpty(value: term))
+    foreach (var item in choices.Reverse())
+        prompt.Select(item: item);
+
+#endregion
+
+#region build stops
+
+stops = AnsiConsole.Prompt(prompt: prompt)
+    .OrderBy(keySelector: id => id)
+    .ToArray();
+
+AnsiConsole.MarkupLine(value: $"[green]✅ Found {stops.Length} stop ids to process[/]");
 AnsiConsole.WriteLine();
+
+#endregion
+
+#region check stops
+
+if (stops.Length is 0)
+{
+    AnsiConsole.MarkupLine(value: "[red]❌ Error: No stop ids selected to process[/]");
+    AnsiConsole.MarkupLine(value: "[yellow]Please select at least one stop id to process[/]");
+    AnsiConsole.WriteLine();
+    
+    return;
+}
 
 #endregion
 
@@ -99,7 +180,7 @@ AnsiConsole.WriteLine();
 
 var targetDate = DateTimeTools.GetTargetDate(now: DateTime.Now);
 
-AnsiConsole.Write(renderable: new Panel(text: $"[bold]Target Date:[/] [yellow]{targetDate:yyyy-MM-dd} ({targetDate.DayOfWeek})[/]")
+AnsiConsole.Write(renderable: new Panel(text: $"[bold]Target date:[/] [yellow]{targetDate:yyyy-MM-dd} ({targetDate.DayOfWeek})[/]")
     .Border(border: BoxBorder.Rounded)
     .BorderColor(color: Color.Blue));
 
@@ -116,6 +197,7 @@ Directory.CreateDirectory(path: "output");
 if (!Directory.Exists(path: "output"))
 {
     AnsiConsole.MarkupLine(value: "[red]❌ Error: Could not create output directory[/]");
+    AnsiConsole.MarkupLine(value: "[yellow]Please ensure you have permission to create directories in the application folder[/]");
     AnsiConsole.WriteLine();
     
     return;
@@ -130,7 +212,7 @@ await AnsiConsole
     .StartAsync(action: async context =>
     {
         var task = context.AddTask(
-            description: "[blue]Processing all stops[/]",
+            description: "[blue]Processing selected stop ids[/]",
             maxValue: stops.Length);
         
         var template = await File.ReadAllTextAsync(path: Path.Combine(

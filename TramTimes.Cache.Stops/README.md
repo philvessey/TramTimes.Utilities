@@ -127,9 +127,10 @@ public class _9400ZZSYMAL1(
         }
         catch (Exception e)
         {
-            logger.LogError(
-                message: "Exception: {exception}",
-                args: e.ToString());
+            if (logger.IsEnabled(logLevel: LogLevel.Error))
+                logger.LogError(
+                    message: "Exception: {exception}",
+                    args: e.ToString());
         }
     }
 }
