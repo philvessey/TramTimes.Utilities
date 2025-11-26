@@ -205,6 +205,13 @@ if (!Directory.Exists(path: "output"))
 
 #endregion
 
+#region clean output
+
+foreach (var item in Directory.GetFiles(path: "output"))
+    File.Delete(path: item);
+
+#endregion
+
 #region write progress
 
 await AnsiConsole
