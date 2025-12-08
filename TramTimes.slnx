@@ -5,6 +5,7 @@
         <File Path="Directory.Packages.props" />
         <File Path="LICENSE" />
         <File Path="README.md" />
+        <File Path="SECURITY.md" />
     </Folder>
     
     <Project Path="TramTimes.Cache.Stops\TramTimes.Cache.Stops.csproj" />
