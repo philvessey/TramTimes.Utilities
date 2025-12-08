@@ -109,7 +109,7 @@ For detailed usage instructions, please refer to each project's individual READM
 
 ```
 TramTimes.Utilities/
-├── TramTimes.Cache.Stops/       # Quartz job generator for caching
+├── TramTimes.Cache.Stops/        # Quartz job generator for caching
 ├── TramTimes.Database.Schedules/ # JSON schedule generator
 ├── TramTimes.Database.Stops/     # Quartz job generator for testing
 ├── TramTimes.Search.Stops/       # Quartz job generator for search indexing
