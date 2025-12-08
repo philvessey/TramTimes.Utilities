@@ -1,29 +1,90 @@
-# Cache.Stops
+# TramTimes.Cache.Stops
 
-A .NET console application that creates C# quartz jobs from a template 
-for tram stops. The jobs are used to cache service and trip data.
+A .NET console application that generates C# Quartz.NET jobs from templates for tram stops. These jobs are designed to 
+cache service and trip data in real-time transit systems, fetching data from PostgreSQL and storing it in Redis for fast access.
 
-## Features
+## 📋 Table of Contents
 
-- 📅 Generates C# quartz jobs from standard templates
+- [Overview](#-overview)
+- [Features](#-features)
+- [Prerequisites](#-prerequisites)
+- [Getting Started](#-getting-started)
+- [Usage](#-usage)
+- [Output](#-output)
+- [Configuration](#-configuration)
+- [Technology Stack](#-technology-stack)
+- [License](#-license)
+
+## 🎯 Overview
+
+This utility automates the creation of Quartz.NET job classes for tram stop caching. Each generated job:
+- Retrieves cached stop data from Redis
+- Fetches fresh schedule data from a PostgreSQL database
+- Updates the cache with the latest information
+- Manages cache expiration and refresh logic
+
+The generated jobs are intended for use in production TramTimes applications to ensure responsive API performance.
+
+## ✨ Features
+
+- 📅 Template-based C# Quartz.NET job generation
 - 🚊 Support for multiple tram networks via data files
-- 📊 Beautiful console interface with progress tracking
+- 📊 Interactive console interface with progress tracking
+- 🔄 Automatic cache refresh logic
+- ⚡ Redis caching integration
+- 🗄️ PostgreSQL database integration
+- 🎨 Beautiful Spectre.Console UI
 
-## Prerequisites
+## ✅ Prerequisites
 
-- Download and install .NET 9.0 SDK
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/download) or later
+- Input data files in the `Data/` directory (text files with stop IDs, one per line)
 
-## Usage
+## 🚀 Getting Started
 
-### 1. Run the Application
+### Installation
 
-```dotnet
+1. Navigate to the project directory:
+   ```bash
+   cd TramTimes.Cache.Stops
+   ```
+
+2. Restore dependencies:
+   ```bash
+   dotnet restore
+   ```
+
+3. Build the project:
+   ```bash
+   dotnet build
+   ```
+
+## 💻 Usage
+
+### Run the Application
+
+```bash
 dotnet run
 ```
 
-### 2. Output
+The application will:
+1. Scan the `Data/` directory for `.txt` files containing stop IDs
+2. Display an interactive progress bar
+3. Generate C# job files in the `output/` directory
 
-The application generates C# quartz jobs with the following structure:
+### Input Data Format
+
+Create text files in the `Data/` directory with one stop ID per line:
+
+```
+9400ZZSYMAL1
+9400ZZSYMAG1
+9400ZZSYMAG2
+```
+
+## 📤 Output
+
+The application generates C# Quartz.NET jobs with the following structure:
 
 ```csharp
 using System.Text.Json;
@@ -136,12 +197,45 @@ public class _9400ZZSYMAL1(
 }
 ```
 
-Each file is named after the stop ID and contains:
-- Cached data retrieved from Redis
-- Fresh data retrieved from the database
-- Uploaded to Azure Blob Storage
+### Key Components
 
-## License
+Each generated job includes:
+- **Cache retrieval**: Fetches existing cached data from Redis
+- **Cache validation**: Checks if cached data is still fresh (4-hour threshold)
+- **Database query**: Retrieves latest schedule from PostgreSQL
+- **Cache update**: Stores updated data in Redis with 12-hour expiry
+- **Trip indexing**: Caches individual trip data for detailed queries
+- **Error handling**: Comprehensive try-catch with logging
+
+### Example Output File
+
+Generated files are named using the stop ID pattern (e.g., `_9400ZZSYMAL1.cs`) and placed in the `output/` directory.
+
+## ⚙️ Configuration
+
+### Data Files
+
+Network configuration files are stored in the `Data/` directory:
+- `manchester.txt` - Stop IDs for Manchester tram network
+- `southyorkshire.txt` - Stop IDs for South Yorkshire tram network
+
+Add new networks by creating additional `.txt` files with stop IDs.
+
+### Template
+
+The code generation template is located in the `Template/` directory and can be customized to modify the structure of generated jobs.
+
+## 🛠 Technology Stack
+
+- **.NET 10.0** - Core framework
+- **C# 13** - Programming language
+- **Spectre.Console** - Rich console UI and progress tracking
+- **Quartz.NET** - Job scheduling framework (in generated code)
+- **Redis** - Caching layer (in generated code)
+- **PostgreSQL** - Database storage (in generated code)
+- **AutoMapper** - Object mapping (in generated code)
+
+## 📄 License
 
 This project is licensed under the MIT License - see 
 the [LICENSE](./LICENSE) file for details.

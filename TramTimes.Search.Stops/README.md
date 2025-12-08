@@ -1,29 +1,91 @@
-# Search.Stops
+# TramTimes.Search.Stops
 
-A .NET console application that creates C# quartz jobs from a template 
-for tram stops. The jobs are used to index stop and service data.
+A .NET console application that generates C# Quartz.NET jobs from templates for tram stops. These jobs are designed to 
+index stop and service data in Elasticsearch, enabling fast full-text search capabilities for tram stop lookups and schedule queries.
 
-## Features
+## 📋 Table of Contents
 
-- 📅 Generates C# quartz jobs from standard templates
+- [Overview](#-overview)
+- [Features](#-features)
+- [Prerequisites](#-prerequisites)
+- [Getting Started](#-getting-started)
+- [Usage](#-usage)
+- [Output](#-output)
+- [Configuration](#-configuration)
+- [Technology Stack](#-technology-stack)
+- [License](#-license)
+
+## 🎯 Overview
+
+This utility automates the creation of Quartz.NET job classes for tram stop search indexing. Each generated job:
+- Retrieves existing indexed data from Elasticsearch
+- Checks if the indexed data needs refreshing (4-hour threshold)
+- Fetches stop metadata and service schedules from PostgreSQL
+- Enriches data with geolocation information
+- Updates the Elasticsearch index for fast search queries
+
+The generated jobs enable real-time search functionality in TramTimes applications, allowing users to quickly find stops and services.
+
+## ✨ Features
+
+- 📅 Template-based C# Quartz.NET job generation
 - 🚊 Support for multiple tram networks via data files
-- 📊 Beautiful console interface with progress tracking
+- 📊 Interactive console interface with progress tracking
+- 🔍 Elasticsearch integration for full-text search
+- 📍 Geolocation support for proximity searches
+- 🗄️ PostgreSQL database integration
+- 🎨 Beautiful Spectre.Console UI
 
-## Prerequisites
+## ✅ Prerequisites
 
-- Download and install .NET 9.0 SDK
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/download) or later
+- Input data files in the `Data/` directory (text files with stop IDs, one per line)
 
-## Usage
+## 🚀 Getting Started
 
-### 1. Run the Application
+### Installation
 
-```dotnet
+1. Navigate to the project directory:
+   ```bash
+   cd TramTimes.Search.Stops
+   ```
+
+2. Restore dependencies:
+   ```bash
+   dotnet restore
+   ```
+
+3. Build the project:
+   ```bash
+   dotnet build
+   ```
+
+## 💻 Usage
+
+### Run the Application
+
+```bash
 dotnet run
 ```
 
-### 2. Output
+The application will:
+1. Scan the `Data/` directory for `.txt` files containing stop IDs
+2. Display an interactive progress bar
+3. Generate C# job files in the `output/` directory
 
-The application generates C# quartz jobs with the following structure:
+### Input Data Format
+
+Create text files in the `Data/` directory with one stop ID per line:
+
+```
+9400ZZSYMAL1
+9400ZZSYMAG1
+9400ZZSYMAG2
+```
+
+## 📤 Output
+
+The application generates C# Quartz.NET jobs with the following structure:
 
 ```csharp
 using AutoMapper;
@@ -123,12 +185,45 @@ public class _9400ZZSYMAL1(
 }
 ```
 
-Each file is named after the stop ID and contains:
-- Indexed data retrieved from Elasticsearch
-- Fresh data retrieved from the database
-- Uploaded to Azure Blob Storage
+### Key Components
 
-## License
+Each generated job includes:
+- **Search retrieval**: Fetches existing indexed data from Elasticsearch
+- **Data validation**: Checks if indexed data is still fresh (4-hour threshold)
+- **Stop metadata**: Retrieves stop information from PostgreSQL
+- **Service data**: Fetches upcoming departure schedules
+- **Geolocation enrichment**: Adds geographic coordinates for proximity searches
+- **Index update**: Updates Elasticsearch with the latest information
+- **Error handling**: Comprehensive try-catch with logging
 
-This project is licensed under the MIT License - see 
-the [LICENSE](./LICENSE) file for details.
+### Example Output File
+
+Generated files are named using the stop ID pattern (e.g., `_9400ZZSYMAL1.cs`) and placed in the `output/` directory.
+
+## ⚙️ Configuration
+
+### Data Files
+
+Network configuration files are stored in the `Data/` directory:
+- `manchester.txt` - Stop IDs for Manchester tram network
+- `southyorkshire.txt` - Stop IDs for South Yorkshire tram network
+
+Add new networks by creating additional `.txt` files with stop IDs.
+
+### Template
+
+The code generation template is located in the `Template/` directory and can be customized to modify the structure of generated jobs.
+
+## 🛠 Technology Stack
+
+- **.NET 10.0** - Core framework
+- **C# 13** - Programming language
+- **Spectre.Console** - Rich console UI and progress tracking
+- **Quartz.NET** - Job scheduling framework (in generated code)
+- **Elasticsearch** - Search and analytics engine (in generated code)
+- **PostgreSQL** - Database storage (in generated code)
+- **AutoMapper** - Object mapping (in generated code)
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.

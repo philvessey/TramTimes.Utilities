@@ -1,30 +1,133 @@
 # TramTimes.Utilities
 
-A collection of .NET support utilities for TramTimes projects.
+A collection of .NET console applications and support utilities for generating code and data structures for TramTimes projects.
+
+## 📋 Table of Contents
+
+- [Overview](#-overview)
+- [Projects](#-projects)
+- [Prerequisites](#-prerequisites)
+- [Getting Started](#-getting-started)
+- [Technology Stack](#-technology-stack)
+- [Project Structure](#-project-structure)
+- [License](#-license)
+
+## 🎯 Overview
+
+This repository contains utility applications that automate the generation of:
+- C# Quartz.NET job schedulers for tram stop data caching and indexing
+- JSON-formatted weekly schedules for tram stops
+- Database builder output testing tools
+
+These utilities support multiple tram networks and provide an interactive console interface for easy operation.
+
+## 📦 Projects
 
 ### [Cache.Stops](./TramTimes.Cache.Stops/README.md)
 
-A .NET console application that creates C# quartz jobs from a template 
-for tram stops. The jobs are used to cache service and trip data.
+A .NET console application that generates C# Quartz.NET jobs from templates for tram stops. These jobs are designed to cache 
+service and trip data in real-time systems.
+
+**Key Features:**
+- 📅 Template-based C# job generation
+- 🚊 Multi-network support
+- 📊 Interactive console interface
 
 ### [Database.Schedules](./TramTimes.Database.Schedules/README.md)
 
-A .NET console application that creates structured JSON files with 
-weekly schedules for tram stops. The schedules are used to test the 
-output of the database builder.
+A .NET console application that creates structured JSON files containing weekly schedules for tram stops. These schedules are 
+used to validate and test database builder output.
+
+**Key Features:**
+- 📅 Weekly schedule generation in JSON format
+- 🚊 Multi-network support
+- 📊 Interactive console interface
 
 ### [Database.Stops](./TramTimes.Database.Stops/README.md)
 
-A .NET console application that creates C# quartz jobs from a template 
-for tram stops. The jobs are used to test the output of the database 
-builder.
+A .NET console application that generates C# Quartz.NET jobs from templates for tram stops. These jobs are specifically 
+designed to test database builder functionality.
+
+**Key Features:**
+- 📅 Template-based C# job generation
+- 🚊 Multi-network support
+- 📊 Interactive console interface
 
 ### [Search.Stops](./TramTimes.Search.Stops/README.md)
 
-A .NET console application that creates C# quartz jobs from a template
-for tram stops. The jobs are used to index stop and service data.
+A .NET console application that generates C# Quartz.NET jobs from templates for tram stops. These jobs are used to index 
+stop and service data for search functionality.
 
-## License
+**Key Features:**
+- 📅 Template-based C# job generation
+- 🚊 Multi-network support
+- 📊 Interactive console interface
 
-These projects are licensed under the MIT License - see 
-the [LICENSE](./LICENSE) file for details.
+## ✅ Prerequisites
+
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/download) or later
+- A terminal or command prompt
+
+## 🚀 Getting Started
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/philvessey/TramTimes.Utilities
+cd TramTimes.Utilities
+```
+
+### Build All Projects
+
+```bash
+dotnet build
+```
+
+### Run a Specific Project
+
+Navigate to the project directory and run:
+
+```bash
+cd TramTimes.Cache.Stops
+dotnet run
+```
+
+Repeat for any other project you wish to run (`TramTimes.Database.Schedules`, `TramTimes.Database.Stops`, or `TramTimes.Search.Stops`).
+
+For detailed usage instructions, please refer to each project's individual README.
+
+## 🛠 Technology Stack
+
+- **.NET 10.0** - Core framework
+- **C# 13** - Programming language
+- **Spectre.Console** - Rich console UI library
+- **HtmlAgilityPack** - HTML parsing and manipulation
+- **Polly** - Resilience and transient-fault-handling library
+- **JetBrains.Annotations** - Code annotations
+
+## 📁 Project Structure
+
+```
+TramTimes.Utilities/
+├── TramTimes.Cache.Stops/       # Quartz job generator for caching
+├── TramTimes.Database.Schedules/ # JSON schedule generator
+├── TramTimes.Database.Stops/     # Quartz job generator for testing
+├── TramTimes.Search.Stops/       # Quartz job generator for search indexing
+├── Directory.Build.props         # Shared build configuration
+├── Directory.Packages.props      # Centralized package management
+├── LICENSE                       # MIT License
+└── README.md                     # This file
+```
+
+Each project follows a consistent structure:
+- `Program.cs` - Application entry point
+- `Builders/` - Code generation builders
+- `Data/` - Input data files (network configurations)
+- `Extensions/` - Utility extension methods
+- `Tools/` - Helper utilities
+- `Template/` - Code generation templates
+- `output/` - Generated files (git-ignored)
+
+## 📄 License
+
+These projects are licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
