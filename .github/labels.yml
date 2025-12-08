@@ -1,0 +1,146 @@
+# Type labels
+- name: bug
+  description: Something isn't working
+  color: "d73a4a"
+
+- name: enhancement
+  description: New feature or request
+  color: "a2eeef"
+
+- name: documentation
+  description: Improvements or additions to documentation
+  color: "0075ca"
+
+- name: question
+  description: Further information is requested
+  color: "d876e3"
+
+# Status labels
+- name: stale
+  description: Inactive issue or PR that may be closed
+  color: "fef2c0"
+
+- name: wontfix
+  description: This will not be worked on
+  color: "ffffff"
+
+- name: duplicate
+  description: This issue or pull request already exists
+  color: "cfd3d7"
+
+- name: invalid
+  description: This doesn't seem right
+  color: "e4e669"
+
+- name: help wanted
+  description: Extra attention is needed
+  color: "008672"
+
+- name: good first issue
+  description: Good for newcomers
+  color: "7057ff"
+
+# Priority labels
+- name: priority/critical
+  description: Critical priority
+  color: "b60205"
+
+- name: priority/high
+  description: High priority
+  color: "d93f0b"
+
+- name: priority/medium
+  description: Medium priority
+  color: "fbca04"
+
+- name: priority/low
+  description: Low priority
+  color: "0e8a16"
+
+# Size labels for PRs
+- name: size/XS
+  description: Extra small PR (< 10 lines changed)
+  color: "3CBF00"
+
+- name: size/S
+  description: Small PR (10-49 lines changed)
+  color: "5D9801"
+
+- name: size/M
+  description: Medium PR (50-199 lines changed)
+  color: "7F7203"
+
+- name: size/L
+  description: Large PR (200-499 lines changed)
+  color: "A14C05"
+
+- name: size/XL
+  description: Extra large PR (500+ lines changed)
+  color: "C32607"
+
+# Project-specific labels
+- name: cache-stops
+  description: Related to TramTimes.Cache.Stops project
+  color: "1d76db"
+
+- name: database-schedules
+  description: Related to TramTimes.Database.Schedules project
+  color: "1d76db"
+
+- name: database-stops
+  description: Related to TramTimes.Database.Stops project
+  color: "1d76db"
+
+- name: search-stops
+  description: Related to TramTimes.Search.Stops project
+  color: "1d76db"
+
+# Technical labels
+- name: dependencies
+  description: Pull requests that update a dependency file
+  color: "0366d6"
+
+- name: github-actions
+  description: Related to GitHub Actions workflows
+  color: "000000"
+
+- name: tests
+  description: Related to testing
+  color: "bfd4f2"
+
+- name: refactoring
+  description: Code refactoring with no functional changes
+  color: "fbca04"
+
+- name: performance
+  description: Performance improvements
+  color: "ffa500"
+
+- name: security
+  description: Security-related issue or fix
+  color: "ee0701"
+
+- name: breaking-change
+  description: Contains breaking changes
+  color: "d93f0b"
+
+- name: maintenance
+  description: Maintenance tasks (build, CI, dependencies)
+  color: "fbca04"
+
+# Work status labels
+- name: work in progress
+  description: Work in progress, do not merge
+  color: "f9d0c4"
+
+- name: ready for review
+  description: Ready for review
+  color: "0e8a16"
+
+- name: needs review
+  description: Needs review from maintainers
+  color: "fbca04"
+
+- name: pinned
+  description: Pinned issue that should not be marked as stale
+  color: "0e8a16"

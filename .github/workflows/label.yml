@@ -1,0 +1,226 @@
+name: Label
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+  pull_request_target:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  issues: write
+  pull-requests: write
+  contents: read
+
+jobs:
+  label-issues:
+    if: github.event_name == 'issues'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label bug reports
+        if: contains(github.event.issue.body, 'bug') || contains(github.event.issue.title, 'bug') || contains(github.event.issue.title, 'fix')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['bug']
+            })
+
+      - name: Label feature requests
+        if: contains(github.event.issue.body, 'feature') || contains(github.event.issue.title, 'feature') || contains(github.event.issue.title, 'enhancement')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['enhancement']
+            })
+
+      - name: Label documentation
+        if: contains(github.event.issue.body, 'documentation') || contains(github.event.issue.title, 'documentation') || contains(github.event.issue.title, 'docs')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['documentation']
+            })
+
+      - name: Label questions
+        if: contains(github.event.issue.body, 'question') || contains(github.event.issue.title, 'question') || contains(github.event.issue.title, 'how to')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['question']
+            })
+
+  label-prs:
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Label by size
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const additions = pr.additions;
+            const deletions = pr.deletions;
+            const changes = additions + deletions;
+
+            let sizeLabel = '';
+
+            if (changes < 10) {
+              sizeLabel = 'size/XS';
+            } else if (changes < 50) {
+              sizeLabel = 'size/S';
+            } else if (changes < 200) {
+              sizeLabel = 'size/M';
+            } else if (changes < 500) {
+              sizeLabel = 'size/L';
+            } else {
+              sizeLabel = 'size/XL';
+            }
+
+            const labels = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number
+            });
+
+            for (const label of labels.data) {
+              if (label.name.startsWith('size/')) {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  name: label.name
+                }).catch(() => {});
+              }
+            }
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels: [sizeLabel]
+            });
+
+      - name: Label by file patterns
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            });
+
+            const labels = [];
+            const filePaths = files.map(f => f.filename);
+
+            if (filePaths.some(f => f.includes('.md'))) {
+              labels.push('documentation');
+            }
+
+            if (filePaths.some(f => f.includes('.github/'))) {
+              labels.push('github-actions');
+            }
+
+            if (filePaths.some(f => f.includes('Dependencies') || f.includes('.csproj') || f.includes('Directory.Packages.props'))) {
+              labels.push('dependencies');
+            }
+
+            if (filePaths.some(f => f.includes('Test'))) {
+              labels.push('tests');
+            }
+
+            if (filePaths.some(f => f.includes('TramTimes.Cache.Stops'))) {
+              labels.push('cache-stops');
+            }
+
+            if (filePaths.some(f => f.includes('TramTimes.Database.Schedules'))) {
+              labels.push('database-schedules');
+            }
+
+            if (filePaths.some(f => f.includes('TramTimes.Database.Stops'))) {
+              labels.push('database-stops');
+            }
+
+            if (filePaths.some(f => f.includes('TramTimes.Search.Stops'))) {
+              labels.push('search-stops');
+            }
+
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: labels
+              });
+            }
+
+      - name: Label by title keywords
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const title = pr.title.toLowerCase();
+            const labels = [];
+
+            if (title.includes('fix') || title.includes('bug')) {
+              labels.push('bug');
+            }
+
+            if (title.includes('feat') || title.includes('feature')) {
+              labels.push('enhancement');
+            }
+
+            if (title.includes('docs') || title.includes('documentation')) {
+              labels.push('documentation');
+            }
+
+            if (title.includes('refactor') || title.includes('cleanup')) {
+              labels.push('refactoring');
+            }
+
+            if (title.includes('perf') || title.includes('performance')) {
+              labels.push('performance');
+            }
+
+            if (title.includes('test')) {
+              labels.push('tests');
+            }
+
+            if (title.includes('breaking')) {
+              labels.push('breaking-change');
+            }
+
+            if (title.includes('chore') || title.includes('ci') || title.includes('build')) {
+              labels.push('maintenance');
+            }
+
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: labels
+              });
+            }

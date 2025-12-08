@@ -1,5 +1,8 @@
 # TramTimes.Utilities
 
+[![.NET Version](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/download)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A collection of .NET console applications and support utilities for generating code and data structures for TramTimes projects.
 
 ## 📋 Table of Contents

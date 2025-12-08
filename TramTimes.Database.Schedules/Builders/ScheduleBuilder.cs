@@ -11,16 +11,16 @@ namespace TramTimes.Database.Schedules.Builders;
 
 public static class ScheduleBuilder
 {
-    private static readonly Random Random = new();
-    private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
-    
+    private static readonly Random _random = new();
+    private static readonly JsonSerializerOptions _options = new() { WriteIndented = true };
+
     public static async Task BuildWeekAsync(
         string stop,
         DateTime targetDate,
         ProgressContext? context = null) {
-        
+
         #region build result
-        
+
         var result = new Schedule
         {
             Monday = [],
@@ -31,33 +31,33 @@ public static class ScheduleBuilder
             Saturday = [],
             Sunday = []
         };
-        
+
         #endregion
-        
+
         #region build task
-        
+
         ProgressTask? task = null;
-        
+
         if (context is not null)
             task = context.AddTask(
                 description: $"[blue]Processing {stop}[/]",
                 maxValue: 7);
-        
+
         #endregion
-        
+
         #region process task
-        
+
         for (var i = 0; i < 7; i++)
         {
             var workingDate = targetDate.AddDays(value: i);
-            
+
             if (task is not null)
                 task.Description = $"[yellow]{workingDate:yyyy-MM-dd}[/]";
-            
+
             var services = await BuildDayAsync(
                 workingDate: workingDate,
                 stop: stop);
-            
+
             switch (workingDate.DayOfWeek)
             {
                 case DayOfWeek.Monday:
@@ -99,125 +99,125 @@ public static class ScheduleBuilder
                     result.Monday.AddRange(collection: services);
                     break;
             }
-            
+
             task?.Increment(value: 1);
-            
+
             await Task.Delay(delay: TimeSpanTools.GetJitteredDelay(
                 baseDelay: TimeSpan.FromMilliseconds(milliseconds: 500),
-                jitterRandom: Random));
+                jitterRandom: _random));
         }
-        
+
         #endregion
-        
+
         #region complete task
-        
+
         await File.WriteAllTextAsync(
             path: Path.Combine(
                 path1: "output",
                 path2: $"_{stop.ToUpper()}.json"),
             contents: JsonSerializer.Serialize(
                 value: result,
-                options: Options));
-        
+                options: _options));
+
         if (task is not null)
         {
             task.Description = $"[green]✅ {stop}[/]";
             task.StopTask();
         }
-        
+
         #endregion
     }
-    
+
     private static async Task<List<Service>> BuildDayAsync(
         DateTime workingDate,
         string stop) {
-        
+
         #region build policy
-        
+
         var policy = Policy.WrapAsync(policies:
         [
             PolicyBuilder.BuildBreaker(),
             PolicyBuilder.BuildRetry()
         ]);
-        
+
         #endregion
-        
+
         #region build client
-        
+
         var client = new HttpClient();
         client.DefaultRequestHeaders.Clear();
-        
+
         #endregion
-        
+
         #region build headers
-        
+
         client.DefaultRequestHeaders.Add(
-            name: "User-Agent", 
+            name: "User-Agent",
             value: "TramTimes/1.0 (+https://tramtimes.net)");
-        
+
         #endregion
-        
+
         #region build url
-        
+
         var url = $"https://bustimes.org/stops/{stop.ToUpper()}?date={workingDate:yyyy-MM-dd}&time=12%3A00";
-        
+
         #endregion
-        
+
         #region build response
-        
+
         var response = await policy.ExecuteAsync(action: async () => await client.GetAsync(requestUri: url));
-        
+
         #endregion
-        
+
         #region check response
-        
+
         if (!response.IsSuccessStatusCode)
             return [];
-        
+
         #endregion
-        
+
         #region build content
-        
+
         var content = await response.Content.ReadAsStringAsync();
-        
+
         #endregion
-        
+
         #region check content
-        
+
         if (string.IsNullOrEmpty(value: content))
             return [];
-        
+
         #endregion
-        
+
         #region build document
-        
+
         var document = new HtmlDocument();
         document.LoadHtml(html: content);
-        
+
         #endregion
-        
+
         #region check document
-        
+
         if (document.ParseErrors.Any())
             return [];
-        
+
         #endregion
-        
+
         #region build rows
-        
+
         var rows = document.DocumentNode.SelectNodes(xpath: "//table//tr[td]");
-        
+
         #endregion
-        
+
         #region check rows
-        
+
         if (rows is null || rows.Count is 0)
             return [];
-        
+
         #endregion
-        
+
         #region build results
-        
+
         var results = rows.Select(selector: row => row.SelectNodes(xpath: "td"))
             .Where(predicate: cells => cells.Count >= 3)
             .Where(predicate: cells => !string.IsNullOrEmpty(value: cells[0].InnerText.Trim()))
@@ -236,9 +236,9 @@ public static class ScheduleBuilder
             .Where(predicate: service => StringTools.GetTimeRange(departureTime: service.DepartureTime))
             .Distinct()
             .ToList();
-        
+
         #endregion
-        
+
         return results;
     }
 }

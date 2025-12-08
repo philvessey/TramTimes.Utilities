@@ -5,42 +5,44 @@ namespace TramTimes.Database.Schedules.Builders;
 
 public static class PolicyBuilder
 {
-    private static readonly Random Random = new();
-    
+    private static readonly Random _random = new();
+
     public static IAsyncPolicy<HttpResponseMessage> BuildBreaker()
     {
         #region build result
-        
+
         var result = Policy
             .Handle<HttpRequestException>()
             .Or<TaskCanceledException>()
-            .OrResult<HttpResponseMessage>(resultPredicate: response => HttpStatusTools.GetStatusCode(statusCode: response.StatusCode))
+            .OrResult<HttpResponseMessage>(resultPredicate: response =>
+                HttpStatusTools.GetStatusCode(statusCode: response.StatusCode))
             .CircuitBreakerAsync(
                 handledEventsAllowedBeforeBreaking: 3,
                 durationOfBreak: TimeSpan.FromMinutes(minutes: 2));
-        
+
         #endregion
-        
+
         return result;
     }
-    
+
     public static IAsyncPolicy<HttpResponseMessage> BuildRetry()
     {
         #region build result
-        
+
         var result = Policy
             .Handle<HttpRequestException>()
             .Or<TaskCanceledException>()
-            .OrResult<HttpResponseMessage>(resultPredicate: response => HttpStatusTools.GetStatusCode(statusCode: response.StatusCode))
+            .OrResult<HttpResponseMessage>(resultPredicate: response =>
+                HttpStatusTools.GetStatusCode(statusCode: response.StatusCode))
             .WaitAndRetryAsync(
                 retryCount: 3,
                 sleepDurationProvider: retryAttempt => TimeSpanTools.GetJitteredDelay(
                     baseDelay: TimeSpan.FromMilliseconds(milliseconds: 1000),
                     retryAttempt: retryAttempt,
-                    jitterRandom: Random));
-        
+                    jitterRandom: _random));
+
         #endregion
-        
+
         return result;
     }
 }

@@ -3,7 +3,7 @@ name: 🚊 New Tram Network Support
 about: Request or propose support for a new tram network
 title: '[NETWORK] '
 labels: ['enhancement', 'network-support', 'triage']
-assignees: ''
+assignees: 'philvessey'
 ---
 
 ## 🚊 Tram Network Information

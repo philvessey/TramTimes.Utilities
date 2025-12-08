@@ -3,7 +3,7 @@ name: ✨ Feature Request
 about: Suggest an idea or enhancement for this project
 title: '[FEATURE] '
 labels: ['enhancement', 'triage']
-assignees: ''
+assignees: 'philvessey'
 ---
 
 ## 💡 Feature Description

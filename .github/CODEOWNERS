@@ -1,0 +1,30 @@
+# Default owner for everything in the repo
+* @philvessey
+
+# Documentation files
+*.md @philvessey
+
+# Root configuration files
+/Directory.Build.props @philvessey
+/Directory.Packages.props @philvessey
+
+# GitHub workflows and templates
+/.github/ @philvessey
+
+# TramTimes.Cache.Stops project
+/TramTimes.Cache.Stops/ @philvessey
+
+# TramTimes.Database.Schedules project
+/TramTimes.Database.Schedules/ @philvessey
+
+# TramTimes.Database.Stops project
+/TramTimes.Database.Stops/ @philvessey
+
+# TramTimes.Search.Stops project
+/TramTimes.Search.Stops/ @philvessey
+
+# Security and community files
+/CODE_OF_CONDUCT.md @philvessey
+/CONTRIBUTING.md @philvessey
+/SECURITY.md @philvessey
+/LICENSE @philvessey

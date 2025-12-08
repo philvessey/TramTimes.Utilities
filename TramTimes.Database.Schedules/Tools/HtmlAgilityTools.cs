@@ -6,9 +6,9 @@ public static class HtmlAgilityTools
         string cell1,
         string cell2,
         string cell3) {
-        
+
         #region build header
-        
+
         var header = new List<string>
         {
             "Route",
@@ -18,21 +18,21 @@ public static class HtmlAgilityTools
             "Scheduled",
             "Expected"
         };
-        
+
         #endregion
-        
+
         #region build result
-        
-        var result = header.Any(predicate: value => 
+
+        var result = header.Any(predicate: value =>
             cell1.Contains(value: value) ||
             cell2.Contains(value: value) ||
             cell3.Contains(value: value) ||
             cell1.Length > 10 ||
             cell2.Length > 20 ||
             cell3.Length > 10);
-        
+
         #endregion
-        
+
         return result;
     }
 }
