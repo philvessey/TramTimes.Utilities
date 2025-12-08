@@ -19,8 +19,9 @@ and are grateful for your support.
 
 ## 📜 Code of Conduct
 
-This project adheres to a code of conduct that all contributors are expected to follow. Please be respectful, 
-inclusive, and considerate in all interactions.
+This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md) that all contributors are expected to follow. 
+Please read the full [Code of Conduct](CODE_OF_CONDUCT.md) to understand the expectations for all participants 
+in our community. Please be respectful, inclusive, and considerate in all interactions.
 
 ### Our Pledge
 
@@ -374,7 +375,7 @@ docs(contributing): add commit message guidelines
 
 - Maintainers will review your PR
 - Address any feedback or requested changes
-- Once approved, a mastertainer will merge your PR
+- Once approved, a maintainer will merge your PR
 - Your contribution will be included in the next release!
 
 ### PR Checklist
