@@ -7,9 +7,9 @@ on:
     types: [opened, edited, reopened, synchronize]
 
 permissions:
+  contents: read
   issues: write
   pull-requests: write
-  contents: read
 
 jobs:
   label-issues:

@@ -237,5 +237,4 @@ The code generation template is located in the `Template/` directory and can be 
 
 ## 📄 License
 
-This project is licensed under the MIT License - see 
-the [LICENSE](./LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
