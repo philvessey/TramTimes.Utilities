@@ -9,13 +9,13 @@ permissions:
   pull-requests: write
 
 jobs:
-  dependency-review:
+  review:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Dependency Review
+      - name: Dependency review
         uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: moderate

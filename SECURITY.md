@@ -2,7 +2,7 @@
 
 ## 🐛 Reporting a Vulnerability
 
-We take the security of TramTimes.Utilities seriously. If you believe you have found a security vulnerability, 
+We take the security of TramTimes.Utilities seriously. If you believe you have found a security vulnerability,
 please report it to us as described below.
 
 ### Please Do Not
@@ -13,6 +13,7 @@ please report it to us as described below.
 ### How to Report
 
 You can use GitHub's private vulnerability reporting feature:
+
 1. Navigate to the repository's **Security** tab
 2. Click **Report a vulnerability**
 3. Fill out the vulnerability details form
@@ -45,6 +46,7 @@ After you submit a report, here's what you can expect:
 When contributing to this project, please follow these security guidelines:
 
 #### Code Security
+
 - Never commit sensitive information (API keys, passwords, tokens, etc.)
 - Use parameterized queries to prevent SQL injection
 - Validate and sanitize all user inputs
@@ -52,11 +54,13 @@ When contributing to this project, please follow these security guidelines:
 - Follow the principle of least privilege
 
 #### Dependency Management
+
 - Regularly update NuGet packages to patch known vulnerabilities
 - Run `dotnet list package --vulnerable` to check for vulnerable dependencies
 - Review dependency updates for security advisories
 
 #### Secrets Management
+
 - Never hardcode credentials in source code
 - Use environment variables or secure configuration providers
 - Add sensitive file patterns to `.gitignore`
@@ -67,30 +71,28 @@ When contributing to this project, please follow these security guidelines:
 When using these utilities:
 
 #### Generated Code
+
 - **Review generated code** before using it in production
 - Ensure generated jobs have proper error handling
 - Validate that connection strings and credentials are properly secured
 - Use secure configuration management (Azure Key Vault, AWS Secrets Manager, etc.)
 
 #### Database Security
+
 - Use strong, unique passwords for database connections
 - Implement proper network security (firewalls, VPNs)
 - Enable SSL/TLS for database connections
 - Follow the principle of least privilege for database users
 
 #### Redis Security
+
 - Enable Redis authentication with strong passwords
 - Use SSL/TLS for Redis connections
 - Restrict Redis network access
 - Regularly update Redis to the latest secure version
 
-#### Azure Blob Storage
-- Use Managed Identities when possible
-- Implement proper access controls (RBAC)
-- Enable encryption at rest and in transit
-- Use SAS tokens with minimal required permissions and short expiration times
-
 #### Elasticsearch Security
+
 - Enable Elasticsearch security features
 - Use strong authentication
 - Implement role-based access control
@@ -116,6 +118,7 @@ Security updates and patches will be released as needed:
 - **Low severity**: Patched in next regular release
 
 Updates will be announced via:
+
 - GitHub Security Advisories
 - Release notes
 - Repository notifications
@@ -132,7 +135,7 @@ We follow a **coordinated disclosure** approach:
 
 ## 🙏 Acknowledgments
 
-We appreciate the security research community's efforts to responsibly disclose vulnerabilities. Contributors who report 
+We appreciate the security research community's efforts to responsibly disclose vulnerabilities. Contributors who report
 valid security issues will be acknowledged in our release notes (unless they prefer to remain anonymous).
 
 ## 📚 Additional Resources

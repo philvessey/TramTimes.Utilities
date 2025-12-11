@@ -62,9 +62,9 @@ Fixes #
 
 <!-- Provide detailed steps to test this PR -->
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## 📸 Screenshots / Output
 
@@ -152,8 +152,6 @@ Paste output or add screenshot
 ## 📚 References
 
 <!-- Link to any relevant documentation, specifications, or resources -->
-
-- 
 
 ---
 

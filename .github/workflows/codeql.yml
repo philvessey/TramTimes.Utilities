@@ -25,7 +25,7 @@ jobs:
         run: semgrep --config=p/default --sarif --output=semgrep.sarif
 
       - name: Upload semgrep
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: semgrep.sarif
 
@@ -44,6 +44,6 @@ jobs:
           output: trivy.sarif
 
       - name: Upload trivy
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy.sarif

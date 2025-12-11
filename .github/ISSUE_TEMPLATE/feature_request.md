@@ -2,7 +2,7 @@
 name: ✨ Feature Request
 about: Suggest an idea or enhancement for this project
 title: '[FEATURE] '
-labels: ['enhancement', 'triage']
+labels: [ 'enhancement', 'triage' ]
 assignees: 'philvessey'
 ---
 
@@ -14,7 +14,7 @@ A clear and concise description of the feature or enhancement you'd like to see.
 
 **Is your feature request related to a problem? Please describe.**
 
-A clear and concise description of what the problem is. 
+A clear and concise description of what the problem is.
 Ex. I'm always frustrated when [...]
 
 **Why is this feature needed?**

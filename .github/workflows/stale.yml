@@ -35,6 +35,7 @@ jobs:
             If you believe this issue is still relevant, please feel free to reopen it or create a new issue with updated information.
 
             Thank you for your understanding! 👋
+          exempt-issue-labels: 'pinned,security,bug,enhancement,good first issue'
           stale-pr-label: 'stale'
           stale-pr-message: |
             This pull request has been automatically marked as stale because it has not had recent activity.
@@ -52,11 +53,10 @@ jobs:
             If you would like to continue with this PR, please feel free to reopen it or submit a new PR.
 
             Thank you for your understanding! 👋
-          exempt-issue-labels: 'pinned,security,bug,enhancement,good first issue'
           exempt-pr-labels: 'pinned,security,work in progress,WIP'
+
+          ascending: false
           exempt-milestones: true
           exempt-all-assignees: true
-
           operations-per-run: 100
           remove-stale-when-updated: true
-          ascending: false

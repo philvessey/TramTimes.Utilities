@@ -2,8 +2,7 @@ name: Sync
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
     paths:
       - '.github/labels.yml'
       - '.github/workflows/sync.yml'

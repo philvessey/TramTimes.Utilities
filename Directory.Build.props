@@ -1,10 +1,10 @@
 <Project>
-    
-    <PropertyGroup>
-        <NoWarn>NU1900</NoWarn>
-        <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-    
+
+  <PropertyGroup>
+    <NoWarn>NU1900</NoWarn>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
 </Project>

@@ -2,7 +2,7 @@
 name: 📝 Documentation
 about: Report missing, unclear, or incorrect documentation
 title: '[DOCS] '
-labels: ['documentation', 'triage']
+labels: [ 'documentation', 'triage' ]
 assignees: 'philvessey'
 ---
 
@@ -21,9 +21,10 @@ A clear and concise description of the documentation problem.
 - [ ] XML documentation
 - [ ] Other: _______________
 
-**Specific file/section**: 
+**Specific file/section**:
 
 Provide a link or path to the specific file or section:
+
 - File: `path/to/file.md`
 - Section: "Section Name"
 - Line numbers (if applicable): L10-L20
@@ -71,8 +72,8 @@ Explain why this documentation improvement is important and who it will help.
 **Related documentation:**
 
 Link to any related documentation that might need updating:
-- 
-- 
+
+-
 
 **Supporting materials:**
 

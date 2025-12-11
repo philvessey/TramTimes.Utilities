@@ -2,7 +2,7 @@
 name: 🚊 New Tram Network Support
 about: Request or propose support for a new tram network
 title: '[NETWORK] '
-labels: ['enhancement', 'network-support', 'triage']
+labels: [ 'enhancement', 'network-support', 'triage' ]
 assignees: 'philvessey'
 ---
 
@@ -27,9 +27,9 @@ assignees: 'philvessey'
 **Schedule Data Details:**
 
 - Data Type: [e.g., GTFS, custom format]
-- Data Source: 
-- Update Frequency: 
-- Data Format: 
+- Data Source:
+- Update Frequency:
+- Data Format:
 
 ## 🚏 Stop Information
 
@@ -38,8 +38,8 @@ assignees: 'philvessey'
 **Stop ID format:**
 
 Example stop IDs:
-- 
-- 
+
+-
 
 ## 📋 Service Information
 
@@ -68,8 +68,8 @@ Example stop IDs:
 **Special considerations:**
 
 List any unique characteristics of this network:
-- 
-- 
+
+-
 
 ## 📦 Data Sample
 
@@ -79,7 +79,7 @@ If possible, provide sample stop IDs, API responses, or schedule data:
 
 ```json
 {
-  "sample": "data here"
+    "sample": "data here"
 }
 ```
 

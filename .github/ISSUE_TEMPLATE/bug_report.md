@@ -2,7 +2,7 @@
 name: 🐛 Bug Report
 about: Create a report to help us improve
 title: '[BUG] '
-labels: ['bug', 'triage']
+labels: [ 'bug', 'triage' ]
 assignees: 'philvessey'
 ---
 

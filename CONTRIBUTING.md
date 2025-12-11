@@ -1,6 +1,6 @@
 # Contributing to TramTimes.Utilities
 
-Thank you for your interest in contributing to TramTimes.Utilities! We welcome contributions from the community 
+Thank you for your interest in contributing to TramTimes.Utilities! We welcome contributions from the community
 and are grateful for your support.
 
 ## 📋 Table of Contents
@@ -19,14 +19,15 @@ and are grateful for your support.
 
 ## 📜 Code of Conduct
 
-This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md) that all contributors are expected to follow. 
-Please read the full [Code of Conduct](CODE_OF_CONDUCT.md) to understand the expectations for all participants 
+This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md) that all contributors are expected to follow.
+Please read the full [Code of Conduct](CODE_OF_CONDUCT.md) to understand the expectations for all participants
 in our community. Please be respectful, inclusive, and considerate in all interactions.
 
 ### Our Pledge
 
-We are committed to providing a welcoming and inspiring community for all. We pledge to make participation in 
+We are committed to providing a welcoming and inspiring community for all. We pledge to make participation in
 our project a harassment-free experience for everyone, regardless of:
+
 - Age, body size, disability, ethnicity, gender identity and expression
 - Level of experience, education, socio-economic status
 - Nationality, personal appearance, race, religion
@@ -46,9 +47,14 @@ our project a harassment-free experience for everyone, regardless of:
 
 Before you begin, ensure you have the following installed:
 
+- A code editor:
+    - [JetBrains Rider](https://www.jetbrains.com/rider/)
+    - [Visual Studio](https://visualstudio.microsoft.com/)
+    - [Visual Studio Code](https://code.visualstudio.com/)
+
+
+- [Git](https://git-scm.com/downloads) version control system
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/download) or later
-- [Git](https://git-scm.com/downloads) Version control system for cloning and managing your contributions
-- A code editor (we recommend [JetBrains Rider](https://www.jetbrains.com/rider/), [Visual Studio](https://visualstudio.microsoft.com/), or [Visual Studio Code](https://code.visualstudio.com/))
 
 ### First Time Setup
 
@@ -354,12 +360,12 @@ feat(search): add geolocation filtering
 2. Click "New Pull Request"
 3. Select the base repository and branch
 4. Fill out the PR template with:
-   - **Description**: What does this PR do?
-   - **Motivation**: Why is this change needed?
-   - **Related Issues**: Link to related issues
-   - **Testing**: How was this tested?
-   - **Screenshots**: If applicable
-   - **Breaking Changes**: Any breaking changes?
+    - **Description**: What does this PR do?
+    - **Motivation**: Why is this change needed?
+    - **Related Issues**: Link to related issues
+    - **Testing**: How was this tested?
+    - **Screenshots**: If applicable
+    - **Breaking Changes**: Any breaking changes?
 
 ### PR Title Format
 
@@ -404,13 +410,14 @@ Create an issue with the following information:
 **Title**: Clear, descriptive title
 
 **Description**:
+
 - **Expected behavior**: What should happen?
 - **Actual behavior**: What actually happens?
 - **Steps to reproduce**: Detailed steps to reproduce the issue
 - **Environment**:
-  - OS: (e.g., Windows 11, macOS 15, Ubuntu 22.04)
-  - .NET Version: (run `dotnet --version`)
-  - Project Version: (e.g., 1.2.3)
+    - OS: (e.g., Windows 11, macOS 15, Ubuntu 22.04)
+    - .NET Version: (run `dotnet --version`)
+    - Project Version: (e.g., 1.2.3)
 - **Error messages**: Full error messages and stack traces
 - **Screenshots**: If applicable
 
@@ -422,6 +429,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Run '...'
 3. See error
@@ -430,6 +438,7 @@ Steps to reproduce the behavior:
 A clear and concise description of what you expected to happen.
 
 **Environment:**
+
 - OS: [e.g., Windows 11]
 - .NET Version: [e.g., 10.0.0]
 - Project Version: [e.g., 1.2.3]
@@ -494,6 +503,7 @@ Add any other context or screenshots about the feature request.
 ### Updating Documentation
 
 When you change functionality:
+
 1. Update relevant README files
 2. Update XML documentation comments
 3. Update code examples if needed
@@ -515,6 +525,7 @@ When you change functionality:
 ## 🎉 Recognition
 
 Contributors will be recognized in:
+
 - Release notes
 - Project README (Contributors section)
 - GitHub's contributor graph
