@@ -15,37 +15,37 @@ public class _{{STOP}}(
     IConnectionMultiplexer cacheService,
     ILogger<_{{STOP}}> logger,
     IMapper mapper) : IJob {
-    
+
     public async Task Execute(IJobExecutionContext context)
     {
         try
         {
             #region get cache feed
-            
+
             var cacheFeed = await cacheService
                 .GetDatabase()
                 .StringGetAsync(key: "{{NETWORK}}:stop:{{STOP}}");
-            
+
             List<CacheStopPoint> mappedResults = [];
-            
+
             if (!cacheFeed.IsNullOrEmpty)
                 mappedResults = mapper.Map<List<CacheStopPoint>>(
                     source: JsonSerializer.Deserialize<List<WorkerStopPoint>>(
                         json: cacheFeed.ToString()));
-            
+
             #endregion
-            
+
             #region check cache feed
-            
+
             if (mappedResults.LastOrDefault()?.DepartureDateTime > DateTime.Now.AddHours(value: 4))
                 return;
-            
+
             #endregion
-            
+
             #region get database feed
-            
+
             var databaseFeed = await Feed.LoadAsync(dataStorage: PostgresStorage.Load(dataSource: dataSource));
-            
+
             var databaseResults = await databaseFeed.GetServicesByStopAsync(
                 id: "{{STOP}}",
                 target: DateTime.Now,
@@ -53,30 +53,30 @@ public class _{{STOP}}(
                 comparison: ComparisonType.Exact,
                 tolerance: TimeSpan.FromHours(value: 12),
                 results: 250);
-            
+
             #endregion
-            
+
             #region set cache feed
-            
+
             await cacheService
                 .GetDatabase()
                 .StringSetAsync(
                     key: "{{NETWORK}}:stop:{{STOP}}",
                     value: JsonSerializer.Serialize(value: mapper.Map<List<WorkerStopPoint>>(source: databaseResults)),
                     expiry: TimeSpan.FromHours(value: 12));
-            
+
             #endregion
-            
+
             #region get trip feed
-            
+
             var tripFeed = databaseResults
                 .Select(selector: s => s.TripId)
                 .ToList();
-            
+
             #endregion
-            
+
             #region set cache feed
-            
+
             foreach (var item in tripFeed)
             {
                 databaseResults = await databaseFeed.GetServicesByTripAsync(
@@ -86,7 +86,7 @@ public class _{{STOP}}(
                     comparison: ComparisonType.Exact,
                     tolerance: TimeSpan.FromHours(value: 12),
                     results: 250);
-                
+
                 await cacheService
                     .GetDatabase()
                     .StringSetAsync(
@@ -94,7 +94,7 @@ public class _{{STOP}}(
                         value: JsonSerializer.Serialize(value: mapper.Map<List<WorkerStopPoint>>(source: databaseResults)),
                         expiry: TimeSpan.FromHours(value: 12));
             }
-            
+
             #endregion
         }
         catch (Exception e)

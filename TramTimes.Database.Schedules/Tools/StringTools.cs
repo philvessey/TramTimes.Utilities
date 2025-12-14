@@ -27,7 +27,7 @@ public static class StringTools
         #region build result
 
         var result = time >= TimeSpan.FromHours(hours: 12) &&
-                     time < TimeSpan.FromHours(hours: 13);
+                          time < TimeSpan.FromHours(hours: 13);
 
         #endregion
 

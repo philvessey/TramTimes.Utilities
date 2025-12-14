@@ -14,8 +14,7 @@ public static class PolicyBuilder
         var result = Policy
             .Handle<HttpRequestException>()
             .Or<TaskCanceledException>()
-            .OrResult<HttpResponseMessage>(resultPredicate: response =>
-                HttpStatusTools.GetStatusCode(statusCode: response.StatusCode))
+            .OrResult<HttpResponseMessage>(resultPredicate: response => HttpStatusTools.GetStatusCode(statusCode: response.StatusCode))
             .CircuitBreakerAsync(
                 handledEventsAllowedBeforeBreaking: 3,
                 durationOfBreak: TimeSpan.FromMinutes(minutes: 2));
@@ -32,8 +31,7 @@ public static class PolicyBuilder
         var result = Policy
             .Handle<HttpRequestException>()
             .Or<TaskCanceledException>()
-            .OrResult<HttpResponseMessage>(resultPredicate: response =>
-                HttpStatusTools.GetStatusCode(statusCode: response.StatusCode))
+            .OrResult<HttpResponseMessage>(resultPredicate: response => HttpStatusTools.GetStatusCode(statusCode: response.StatusCode))
             .WaitAndRetryAsync(
                 retryCount: 3,
                 sleepDurationProvider: retryAttempt => TimeSpanTools.GetJitteredDelay(

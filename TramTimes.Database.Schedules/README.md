@@ -1,7 +1,8 @@
 # TramTimes.Database.Schedules
 
-A .NET console application that generates structured JSON files containing weekly schedules for tram stops. These schedules are used to 
-validate and test the output of the database builder, ensuring schedule accuracy across all days of the week.
+A .NET console application that generates structured JSON files containing weekly schedules for tram stops. These
+schedules are used to validate and test the output of the database builder, ensuring schedule accuracy across all days
+of the week.
 
 ## 📋 Table of Contents
 
@@ -17,7 +18,9 @@ validate and test the output of the database builder, ensuring schedule accuracy
 
 ## 🎯 Overview
 
-This utility creates comprehensive weekly schedules in JSON format for tram stops. The generated schedules provide a reference dataset for:
+This utility creates comprehensive weekly schedules in JSON format for tram stops. The generated schedules provide a
+reference dataset for:
+
 - Testing database builder functionality
 - Validating schedule accuracy
 - Comparing expected vs actual departure times
@@ -65,6 +68,7 @@ dotnet run
 ```
 
 The application will:
+
 1. Scan the `Data/` directory for `.txt` files containing stop IDs
 2. Display an interactive progress bar
 3. Generate JSON schedule files in the `output/` directory
@@ -143,13 +147,14 @@ Each file is named after the stop ID (e.g., `_9400ZZSYMAL1.json`) and contains:
 
 - **Day Arrays**: Separate arrays for each day of the week (monday through sunday)
 - **Service Objects**: Each service includes:
-  - `departure_time` - Scheduled departure time in HH:MM:SS format
-  - `destination_name` - Final destination of the tram service
-  - `route_name` - Route identifier (e.g., BLUE, PURP, YELL)
+    - `departure_time` - Scheduled departure time in HH:MM:SS format
+    - `destination_name` - Final destination of the tram service
+    - `route_name` - Route identifier (e.g., BLUE, PURP, YELL)
 
 ### Example Output File
 
 Generated files are placed in the `output/` directory and can be used for:
+
 - Automated testing of schedule accuracy
 - Manual verification of timetables
 - Data comparison with live systems
@@ -160,6 +165,7 @@ Generated files are placed in the `output/` directory and can be used for:
 ### Data Files
 
 Network configuration files are stored in the `Data/` directory:
+
 - `manchester.txt` - Stop IDs for Manchester tram network
 - `southyorkshire.txt` - Stop IDs for South Yorkshire tram network
 
@@ -167,7 +173,8 @@ Add new networks by creating additional `.txt` files with stop IDs.
 
 ### Template
 
-The JSON generation template is located in the `Template/` directory and can be customized to modify the structure of generated schedules.
+The JSON generation template is located in the `Template/` directory and can be customized to modify the structure of
+generated schedules.
 
 ## 🛠 Technology Stack
 

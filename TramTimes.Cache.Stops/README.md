@@ -1,7 +1,8 @@
 # TramTimes.Cache.Stops
 
-A .NET console application that generates C# Quartz.NET jobs from templates for tram stops. These jobs are designed to 
-cache service and trip data in real-time transit systems, fetching data from PostgreSQL and storing it in Redis for fast access.
+A .NET console application that generates C# Quartz.NET jobs from templates for tram stops. These jobs are designed to
+cache service and trip data in real-time transit systems, fetching data from PostgreSQL and storing it in Redis for fast
+access.
 
 ## 📋 Table of Contents
 
@@ -18,6 +19,7 @@ cache service and trip data in real-time transit systems, fetching data from Pos
 ## 🎯 Overview
 
 This utility automates the creation of Quartz.NET job classes for tram stop caching. Each generated job:
+
 - Retrieves cached stop data from Redis
 - Fetches fresh schedule data from a PostgreSQL database
 - Updates the cache with the latest information
@@ -68,6 +70,7 @@ dotnet run
 ```
 
 The application will:
+
 1. Scan the `Data/` directory for `.txt` files containing stop IDs
 2. Display an interactive progress bar
 3. Generate C# job files in the `output/` directory
@@ -104,37 +107,37 @@ public class _9400ZZSYMAL1(
     IConnectionMultiplexer cacheService,
     ILogger<_9400ZZSYMAL1> logger,
     IMapper mapper) : IJob {
-    
+
     public async Task Execute(IJobExecutionContext context)
     {
         try
         {
             #region get cache feed
-            
+
             var cacheFeed = await cacheService
                 .GetDatabase()
                 .StringGetAsync(key: "southyorkshire:stop:9400ZZSYMAL1");
-            
+
             List<CacheStopPoint> mappedResults = [];
-            
+
             if (!cacheFeed.IsNullOrEmpty)
                 mappedResults = mapper.Map<List<CacheStopPoint>>(
                     source: JsonSerializer.Deserialize<List<WorkerStopPoint>>(
                         json: cacheFeed.ToString()));
-            
+
             #endregion
-            
+
             #region check cache feed
-            
+
             if (mappedResults.LastOrDefault()?.DepartureDateTime > DateTime.Now.AddHours(value: 4))
                 return;
-            
+
             #endregion
-            
+
             #region get database feed
-            
+
             var databaseFeed = await Feed.LoadAsync(dataStorage: PostgresStorage.Load(dataSource: dataSource));
-            
+
             var databaseResults = await databaseFeed.GetServicesByStopAsync(
                 id: "9400ZZSYMAL1",
                 target: DateTime.Now,
@@ -142,30 +145,30 @@ public class _9400ZZSYMAL1(
                 comparison: ComparisonType.Exact,
                 tolerance: TimeSpan.FromHours(value: 12),
                 results: 250);
-            
+
             #endregion
-            
+
             #region set cache feed
-            
+
             await cacheService
                 .GetDatabase()
                 .StringSetAsync(
                     key: "southyorkshire:stop:9400ZZSYMAL1",
                     value: JsonSerializer.Serialize(value: mapper.Map<List<WorkerStopPoint>>(source: databaseResults)),
                     expiry: TimeSpan.FromHours(value: 12));
-            
+
             #endregion
-            
+
             #region get trip feed
-            
+
             var tripFeed = databaseResults
                 .Select(selector: s => s.TripId)
                 .ToList();
-            
+
             #endregion
-            
+
             #region set cache feed
-            
+
             foreach (var item in tripFeed)
             {
                 databaseResults = await databaseFeed.GetServicesByTripAsync(
@@ -175,7 +178,7 @@ public class _9400ZZSYMAL1(
                     comparison: ComparisonType.Exact,
                     tolerance: TimeSpan.FromHours(value: 12),
                     results: 250);
-                
+
                 await cacheService
                     .GetDatabase()
                     .StringSetAsync(
@@ -183,7 +186,7 @@ public class _9400ZZSYMAL1(
                         value: JsonSerializer.Serialize(value: mapper.Map<List<WorkerStopPoint>>(source: databaseResults)),
                         expiry: TimeSpan.FromHours(value: 12));
             }
-            
+
             #endregion
         }
         catch (Exception e)
@@ -200,6 +203,7 @@ public class _9400ZZSYMAL1(
 ### Key Components
 
 Each generated job includes:
+
 - **Cache retrieval**: Fetches existing cached data from Redis
 - **Cache validation**: Checks if cached data is still fresh (4-hour threshold)
 - **Database query**: Retrieves latest schedule from PostgreSQL
@@ -216,6 +220,7 @@ Generated files are named using the stop ID pattern (e.g., `_9400ZZSYMAL1.cs`) a
 ### Data Files
 
 Network configuration files are stored in the `Data/` directory:
+
 - `manchester.txt` - Stop IDs for Manchester tram network
 - `southyorkshire.txt` - Stop IDs for South Yorkshire tram network
 
@@ -223,7 +228,8 @@ Add new networks by creating additional `.txt` files with stop IDs.
 
 ### Template
 
-The code generation template is located in the `Template/` directory and can be customized to modify the structure of generated jobs.
+The code generation template is located in the `Template/` directory and can be customized to modify the structure of
+generated jobs.
 
 ## 🛠 Technology Stack
 

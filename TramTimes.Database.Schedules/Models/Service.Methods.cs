@@ -14,8 +14,8 @@ public partial class Service : IEquatable<Service>
         #region build result
 
         var result = DepartureTime == other.DepartureTime &&
-                     DestinationName == other.DestinationName &&
-                     RouteName == other.RouteName;
+                          DestinationName == other.DestinationName &&
+                          RouteName == other.RouteName;
 
         #endregion
 

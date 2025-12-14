@@ -96,8 +96,10 @@ public static class ScheduleBuilder
                     break;
                 }
                 default:
+                {
                     result.Monday.AddRange(collection: services);
                     break;
+                }
             }
 
             task?.Increment(value: 1);

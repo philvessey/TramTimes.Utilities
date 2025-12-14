@@ -45,7 +45,7 @@ if (data.Length is 0)
     AnsiConsole.MarkupLine(value: "[red]❌ Error: No data files found in Data directory[/]");
     AnsiConsole.MarkupLine(value: "[yellow]Please create a text file with stop ids in the Data directory, one per line[/]");
     AnsiConsole.WriteLine();
-    
+
     return;
 }
 
@@ -79,7 +79,7 @@ if (!File.Exists(path: path))
     AnsiConsole.MarkupLine(value: $"[red]❌ Error: {path} not found[/]");
     AnsiConsole.MarkupLine(value: $"[yellow]Please create a text file with stop ids at {path}, one per line[/]");
     AnsiConsole.WriteLine();
-    
+
     return;
 }
 
@@ -98,7 +98,7 @@ if (stops.Length is 0)
     AnsiConsole.MarkupLine(value: $"[red]❌ Error: No valid stop ids found in {path}[/]");
     AnsiConsole.MarkupLine(value: "[yellow]Please ensure the file contains valid stop ids, one per line[/]");
     AnsiConsole.WriteLine();
-    
+
     return;
 }
 
@@ -133,7 +133,7 @@ if (choices.Length is 0)
     AnsiConsole.MarkupLine(value: $"[red]❌ Error: No stop ids found matching '{term}'[/]");
     AnsiConsole.MarkupLine(value: "[yellow]Please try a different search term or leave blank to select all[/]");
     AnsiConsole.WriteLine();
-    
+
     return;
 }
 
@@ -154,7 +154,8 @@ if (string.IsNullOrEmpty(value: term))
 
 #region build stops
 
-stops = AnsiConsole.Prompt(prompt: prompt)
+stops = AnsiConsole
+    .Prompt(prompt: prompt)
     .OrderBy(keySelector: id => id)
     .ToArray();
 
@@ -170,7 +171,7 @@ if (stops.Length is 0)
     AnsiConsole.MarkupLine(value: "[red]❌ Error: No stop ids selected to process[/]");
     AnsiConsole.MarkupLine(value: "[yellow]Please select at least one stop id to process[/]");
     AnsiConsole.WriteLine();
-    
+
     return;
 }
 
@@ -199,7 +200,7 @@ if (!Directory.Exists(path: "output"))
     AnsiConsole.MarkupLine(value: "[red]❌ Error: Could not create output directory[/]");
     AnsiConsole.MarkupLine(value: "[yellow]Please ensure you have permission to create directories in the application folder[/]");
     AnsiConsole.WriteLine();
-    
+
     return;
 }
 
@@ -221,19 +222,19 @@ await AnsiConsole
         var task = context.AddTask(
             description: "[blue]Processing selected stop ids[/]",
             maxValue: stops.Length);
-        
+
         var template = await File.ReadAllTextAsync(path: Path.Combine(
             path1: "Template",
             path2: Path.GetFileName(path: path)));
-        
+
         template = template.Replace(
             oldValue: "{{NETWORK}}",
             newValue: Path.GetFileNameWithoutExtension(path: path));
-        
+
         foreach (var item in stops)
         {
             task.Description = $"[yellow]⏱️  {item}[/]";
-            
+
             await File.WriteAllTextAsync(
                 path: Path.Combine(
                     path1: "output",
@@ -241,14 +242,14 @@ await AnsiConsole
                 contents: template.Replace(
                     oldValue: "{{STOP}}",
                     newValue: item));
-            
+
             task.Increment(value: 1);
-            
+
             await Task.Delay(delay: TimeSpanTools.GetJitteredDelay(
                 baseDelay: TimeSpan.FromMilliseconds(milliseconds: 1000),
                 jitterRandom: random));
         }
-        
+
         task.Description = $"[green]✅ {stops[^1]}[/]";
         task.StopTask();
     });

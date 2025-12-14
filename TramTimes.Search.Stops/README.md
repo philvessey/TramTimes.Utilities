@@ -1,7 +1,8 @@
 # TramTimes.Search.Stops
 
-A .NET console application that generates C# Quartz.NET jobs from templates for tram stops. These jobs are designed to 
-index stop and service data in Elasticsearch, enabling fast full-text search capabilities for tram stop lookups and schedule queries.
+A .NET console application that generates C# Quartz.NET jobs from templates for tram stops. These jobs are designed to
+index stop and service data in Elasticsearch, enabling fast full-text search capabilities for tram stop lookups and
+schedule queries.
 
 ## 📋 Table of Contents
 
@@ -18,13 +19,15 @@ index stop and service data in Elasticsearch, enabling fast full-text search cap
 ## 🎯 Overview
 
 This utility automates the creation of Quartz.NET job classes for tram stop search indexing. Each generated job:
+
 - Retrieves existing indexed data from Elasticsearch
 - Checks if the indexed data needs refreshing (4-hour threshold)
 - Fetches stop metadata and service schedules from PostgreSQL
 - Enriches data with geolocation information
 - Updates the Elasticsearch index for fast search queries
 
-The generated jobs enable real-time search functionality in TramTimes applications, allowing users to quickly find stops and services.
+The generated jobs enable real-time search functionality in TramTimes applications, allowing users to quickly find stops
+and services.
 
 ## ✨ Features
 
@@ -69,6 +72,7 @@ dotnet run
 ```
 
 The application will:
+
 1. Scan the `Data/` directory for `.txt` files containing stop IDs
 2. Display an interactive progress bar
 3. Generate C# job files in the `output/` directory
@@ -104,41 +108,41 @@ public class _9400ZZSYMAL1(
     ElasticsearchClient searchService,
     ILogger<_9400ZZSYMAL1> logger,
     IMapper mapper) : IJob {
-    
+
     public async Task Execute(IJobExecutionContext context)
     {
         try
         {
             #region get search feed
-            
+
             var searchFeed = await searchService.GetAsync<SearchStop>(request: new GetRequest
             {
                 Id = "9400ZZSYMAL1",
                 Index = "southyorkshire"
             });
-            
+
             List<SearchStopPoint> mappedResults = [];
-            
+
             if (searchFeed.Source is not null)
                 mappedResults = searchFeed.Source.Points ?? [];
-            
+
             #endregion
-            
+
             #region check search feed
-            
+
             if (mappedResults.LastOrDefault()?.DepartureDateTime > DateTime.Now.AddHours(value: 4))
                 return;
-            
+
             #endregion
-            
+
             #region get database feed
-            
+
             var databaseFeed = await Feed.LoadAsync(dataStorage: PostgresStorage.Load(dataSource: dataSource));
-            
+
             var stopResults = await databaseFeed.GetStopsByIdAsync(
                 id: "9400ZZSYMAL1",
                 comparison: ComparisonType.Exact);
-            
+
             var serviceResults = await databaseFeed.GetServicesByStopAsync(
                 id: "9400ZZSYMAL1",
                 target: DateTime.Now,
@@ -146,32 +150,32 @@ public class _9400ZZSYMAL1(
                 comparison: ComparisonType.Exact,
                 tolerance: TimeSpan.FromHours(value: 12),
                 results: 250);
-            
+
             var databaseResults = mapper.Map<List<SearchStop>>(source: stopResults).FirstOrDefault() ?? new SearchStop();
             databaseResults.Points = mapper.Map<List<SearchStopPoint>>(source: serviceResults) ?? [];
-            
+
             #endregion
-            
+
             #region check database feed
-            
+
             if (databaseResults is { Latitude: not null, Longitude: not null })
                 databaseResults.Location = GeoLocation.LatitudeLongitude(latitudeLongitude: new LatLonGeoLocation 
                 {
                     Lat = databaseResults.Latitude.Value,
                     Lon = databaseResults.Longitude.Value
                 });
-            
+
             #endregion
-            
+
             #region set search feed
-            
+
             await searchService.IndexAsync(request: new IndexRequest<SearchStop>
             {
                 Document = databaseResults,
                 Id = databaseResults.Id ?? "9400ZZSYMAL1",
                 Index = "southyorkshire"
             });
-            
+
             #endregion
         }
         catch (Exception e)
@@ -188,6 +192,7 @@ public class _9400ZZSYMAL1(
 ### Key Components
 
 Each generated job includes:
+
 - **Search retrieval**: Fetches existing indexed data from Elasticsearch
 - **Data validation**: Checks if indexed data is still fresh (4-hour threshold)
 - **Stop metadata**: Retrieves stop information from PostgreSQL
@@ -205,6 +210,7 @@ Generated files are named using the stop ID pattern (e.g., `_9400ZZSYMAL1.cs`) a
 ### Data Files
 
 Network configuration files are stored in the `Data/` directory:
+
 - `manchester.txt` - Stop IDs for Manchester tram network
 - `southyorkshire.txt` - Stop IDs for South Yorkshire tram network
 
@@ -212,7 +218,8 @@ Add new networks by creating additional `.txt` files with stop IDs.
 
 ### Template
 
-The code generation template is located in the `Template/` directory and can be customized to modify the structure of generated jobs.
+The code generation template is located in the `Template/` directory and can be customized to modify the structure of
+generated jobs.
 
 ## 🛠 Technology Stack
 
