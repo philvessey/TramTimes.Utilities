@@ -15,7 +15,7 @@ public class _{{STOP}}(
     NpgsqlDataSource dataSource,
     ILogger<_{{STOP}}> logger) : IJob {
 
-    private static readonly JsonSerializerOptions Options = new() { WriteIndented = true };
+    private static readonly JsonSerializerOptions _options = new() { WriteIndented = true };
 
     public async Task Execute(IJobExecutionContext context)
     {
@@ -138,7 +138,7 @@ public class _{{STOP}}(
 
                         if (databaseResults.ElementAtOrDefault(index: i) is null ||
                             !departureTime.Equals(value: value.DepartureTime) ||
-                            !routeName.Equals(value: value.RouteName)){
+                            !routeName.Equals(value: value.RouteName)) {
 
                             testResults.Add(item: value);
                         }
@@ -339,7 +339,7 @@ public class _{{STOP}}(
                 path: localPath,
                 contents: JsonSerializer.Serialize(
                     value: testResults,
-                    options: Options));
+                    options: _options));
 
             await containerClient
                 .GetBlobClient(blobName: Path.Combine(
@@ -347,13 +347,7 @@ public class _{{STOP}}(
                     path2: "{{STOP}}.json"))
                 .UploadAsync(
                     path: localPath,
-                    options: new BlobUploadOptions
-                    {
-                        HttpHeaders = new BlobHttpHeaders
-                        {
-                            ContentType = "application/json"
-                        }
-                    });
+                    options: new BlobUploadOptions { HttpHeaders = new BlobHttpHeaders { ContentType = "application/json" } });
 
             #endregion
         }
