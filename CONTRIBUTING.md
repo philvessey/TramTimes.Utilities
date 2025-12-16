@@ -61,7 +61,7 @@ Before you begin, ensure you have the following installed:
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/philvessey/TramTimes.Utilities.git
+   git clone https://github.com/<your-username>/TramTimes.Utilities.git
    cd TramTimes.Utilities
    ```
 
@@ -347,7 +347,11 @@ feat(search): add geolocation filtering
    dotnet format
    ```
 
-4. **Commit your changes** following the commit guidelines
+4. **Commit your changes** following the commit guidelines:
+   ```bash
+   git add .
+   git commit -m "feat(cache): add support for Edinburgh tram network"
+   ```
 
 5. **Push to your fork**:
    ```bash

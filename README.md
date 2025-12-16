@@ -74,15 +74,15 @@ stop and service data for search functionality.
 
 ## ✅ Prerequisites
 
+- [Git](https://git-scm.com/downloads) version control system
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/download) or later
-- A terminal or command prompt
 
 ## 🚀 Getting Started
 
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/philvessey/TramTimes.Utilities
+git clone https://github.com/philvessey/TramTimes.Utilities.git
 cd TramTimes.Utilities
 ```
 
