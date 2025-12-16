@@ -403,7 +403,7 @@ docs(contributing): add commit message guidelines
 
 ### Before Submitting a Bug Report
 
-- Check the [existing issues](https://github.com/ORIGINAL-OWNER/TramTimes.Utilities/issues)
+- Check the [existing issues](https://github.com/philvessey/TramTimes.Utilities/issues)
 - Verify you're using the latest version
 - Collect relevant information about your environment
 
