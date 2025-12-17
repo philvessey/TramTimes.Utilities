@@ -41,8 +41,9 @@ and services.
 
 ## ✅ Prerequisites
 
-- [.NET 10.0 SDK](https://dotnet.microsoft.com/download) or later
-- Input data files in the `Data/` directory (text files with stop IDs, one per line)
+- [Git](https://git-scm.com/downloads)
+- [GitHub CLI](https://cli.github.com/)
+- [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 
 ## 🚀 Getting Started
 
@@ -83,8 +84,8 @@ Create text files in the `Data/` directory with one stop ID per line:
 
 ```
 9400ZZSYMAL1
-9400ZZSYMAG1
-9400ZZSYMAG2
+9400ZZSYMHI1
+9400ZZSYMHI2
 ```
 
 ## 📤 Output
@@ -233,4 +234,4 @@ generated jobs.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

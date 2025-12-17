@@ -53,12 +53,17 @@ Before you begin, ensure you have the following installed:
     - [Visual Studio Code](https://code.visualstudio.com/)
 
 
-- [Git](https://git-scm.com/downloads) version control system
-- [.NET 10.0 SDK](https://dotnet.microsoft.com/download) or later
+- [Git](https://git-scm.com/downloads)
+- [GitHub CLI](https://cli.github.com/)
+- [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 
 ### First Time Setup
 
-1. **Fork the repository** on GitHub
+1. **Fork the repository** on GitHub via Web or using GitHub CLI:
+   ```bash
+   gh repo fork philvessey/TramTimes.Utilities
+   ```
+
 2. **Clone your fork** locally:
    ```bash
    git clone https://github.com/<your-username>/TramTimes.Utilities.git
@@ -85,7 +90,7 @@ Before you begin, ensure you have the following installed:
    dotnet build
    ```
 
-7. **Run the applications** to verify everything works:
+7. **Run an application** to verify everything works:
    ```bash
    cd TramTimes.Cache.Stops
    dotnet run
@@ -118,13 +123,13 @@ We welcome many types of contributions:
 
 ```
 TramTimes.Utilities/
-├── TramTimes.Cache.Stops/        # Cache job generator
-├── TramTimes.Database.Schedules/ # Schedule JSON generator
-├── TramTimes.Database.Stops/     # Database test job generator
-├── TramTimes.Search.Stops/       # Search indexing job generator
-├── Directory.Build.props         # Shared build configuration
-├── Directory.Packages.props      # Centralized package management
-└── TramTimes.slnx                # Solution file
+├── TramTimes.Cache.Stops/           # Cache job generator
+├── TramTimes.Database.Schedules/    # Schedule JSON generator
+├── TramTimes.Database.Stops/        # Database test job generator
+├── TramTimes.Search.Stops/          # Search indexing job generator
+├── Directory.Build.props            # Shared build configuration
+├── Directory.Packages.props         # Centralized package management
+└── TramTimes.slnx                   # Solution file
 ```
 
 ### Building the Project
@@ -138,17 +143,6 @@ dotnet build TramTimes.Cache.Stops/TramTimes.Cache.Stops.csproj
 
 # Build in Release mode
 dotnet build -c Release
-```
-
-### Running the Applications
-
-```bash
-# Run a specific project
-cd TramTimes.Cache.Stops
-dotnet run
-
-# Run with specific framework
-dotnet run --framework net10.0
 ```
 
 ### Debugging
@@ -178,7 +172,7 @@ public void ProcessStop(string stopId)
 }
 
 // UPPER_CASE for constants
-private const string DEFAULT_NETWORK = "MANCHESTER";
+private const string DEFAULT_NETWORK = "SOUTHYORKSHIRE";
 
 // Prefix interfaces with 'I'
 public interface IStopBuilder { }
@@ -276,7 +270,7 @@ public string BuildStop(string stopId)
 
 ### Commit Message Format
 
-We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
+We follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification:
 
 ```
 <type>(<scope>): <subject>
@@ -336,24 +330,28 @@ feat(search): add geolocation filtering
    git rebase upstream/master
    ```
 
-2. **Build and test**:
+2. **Build solution**:
    ```bash
    dotnet build
+   ```
+
+3. **Test solution**:
+   ```bash
    dotnet test
    ```
 
-3. **Run code formatting** (if applicable):
+4. **Run code formatting** (if applicable):
    ```bash
    dotnet format
    ```
 
-4. **Commit your changes** following the commit guidelines:
+5. **Commit your changes** following the commit guidelines:
    ```bash
    git add .
    git commit -m "feat(cache): add support for Edinburgh tram network"
    ```
 
-5. **Push to your fork**:
+6. **Push to your fork**:
    ```bash
    git push origin feature/your-feature-name
    ```
@@ -421,7 +419,6 @@ Create an issue with the following information:
 - **Environment**:
     - OS: (e.g., Windows 11, macOS 15, Ubuntu 22.04)
     - .NET Version: (run `dotnet --version`)
-    - Project Version: (e.g., 1.2.3)
 - **Error messages**: Full error messages and stack traces
 - **Screenshots**: If applicable
 
@@ -445,7 +442,6 @@ A clear and concise description of what you expected to happen.
 
 - OS: [e.g., Windows 11]
 - .NET Version: [e.g., 10.0.0]
-- Project Version: [e.g., 1.2.3]
 
 **Additional context**
 Add any other context about the problem here.

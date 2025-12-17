@@ -1,6 +1,6 @@
 # TramTimes.Utilities
 
-[![.NET Version](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/download)
+[![.NET Version](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 A collection of .NET console applications and support utilities for generating code and data structures for TramTimes
@@ -74,8 +74,9 @@ stop and service data for search functionality.
 
 ## ✅ Prerequisites
 
-- [Git](https://git-scm.com/downloads) version control system
-- [.NET 10.0 SDK](https://dotnet.microsoft.com/download) or later
+- [Git](https://git-scm.com/downloads)
+- [GitHub CLI](https://cli.github.com/)
+- [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 
 ## 🚀 Getting Started
 
@@ -119,14 +120,13 @@ For detailed usage instructions, please refer to each project's individual READM
 
 ```
 TramTimes.Utilities/
-├── TramTimes.Cache.Stops/        # Quartz job generator for caching
-├── TramTimes.Database.Schedules/ # JSON schedule generator
-├── TramTimes.Database.Stops/     # Quartz job generator for testing
-├── TramTimes.Search.Stops/       # Quartz job generator for search indexing
-├── Directory.Build.props         # Shared build configuration
-├── Directory.Packages.props      # Centralized package management
-├── LICENSE                       # MIT License
-└── README.md                     # This file
+├── TramTimes.Cache.Stops/           # Cache job generator
+├── TramTimes.Database.Schedules/    # Schedule JSON generator
+├── TramTimes.Database.Stops/        # Database test job generator
+├── TramTimes.Search.Stops/          # Search indexing job generator
+├── Directory.Build.props            # Shared build configuration
+├── Directory.Packages.props         # Centralized package management
+└── TramTimes.slnx                   # Solution file
 ```
 
 Each project follows a consistent structure:
@@ -141,4 +141,4 @@ Each project follows a consistent structure:
 
 ## 📄 License
 
-These projects are licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+These projects are licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

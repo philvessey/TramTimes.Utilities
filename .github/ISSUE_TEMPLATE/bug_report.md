@@ -33,7 +33,6 @@ Please complete the following information:
 
 - **OS**: [e.g., Windows 11, macOS 15, Ubuntu 22.04]
 - **.NET Version**: [run `dotnet --version`, e.g., 10.0.0]
-- **Project Version**: [e.g., 1.2.3]
 - **Project**: [e.g., TramTimes.Cache.Stops, TramTimes.Database.Schedules]
 
 ## 📝 Error Messages / Stack Trace

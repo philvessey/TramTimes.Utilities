@@ -38,7 +38,7 @@ Fixes #
 - [ ] TramTimes.Database.Schedules
 - [ ] TramTimes.Database.Stops
 - [ ] TramTimes.Search.Stops
-- [ ] Shared configuration (Directory.Build.props, Directory.Packages.props)
+- [ ] Root configuration (Directory.Build.props, Directory.Packages.props)
 - [ ] Documentation only
 
 ## 🧪 Testing
@@ -115,7 +115,7 @@ Paste output or add screenshot
 
 ### Commits
 
-- [ ] My commits follow the [Conventional Commits](https://www.conventionalcommits.org/) specification
+- [ ] My commits follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification
 - [ ] My commit messages are clear and descriptive
 - [ ] I have rebased my branch on the latest upstream/master
 
