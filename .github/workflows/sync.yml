@@ -22,7 +22,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Sync labels
+      - name: Label sync
         uses: EndBug/label-sync@v2
         with:
           config-file: .github/labels.yml

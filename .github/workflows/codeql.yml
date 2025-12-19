@@ -3,8 +3,14 @@ name: CodeQL
 on:
   push:
     branches: [ master ]
+    paths-ignore:
+      - 'LICENSE'
+      - '**.md'
   pull_request:
     branches: [ master ]
+    paths-ignore:
+      - 'LICENSE'
+      - '**.md'
 
 permissions:
   actions: read
@@ -18,13 +24,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install semgrep
+      - name: Semgrep install
         run: pip install semgrep==1.145.0
 
-      - name: Run semgrep
+      - name: Semgrep run
         run: semgrep --config=p/default --sarif --output=semgrep.sarif
 
-      - name: Upload semgrep
+      - name: Semgrep upload
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: semgrep.sarif
@@ -35,7 +41,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run trivy
+      - name: Trivy run
         uses: aquasecurity/trivy-action@0.33.1
         with:
           scan-type: fs
@@ -43,7 +49,7 @@ jobs:
           format: sarif
           output: trivy.sarif
 
-      - name: Upload trivy
+      - name: Trivy upload
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy.sarif
