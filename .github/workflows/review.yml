@@ -3,6 +3,9 @@ name: Review
 on:
   pull_request:
     branches: [ master ]
+    paths-ignore:
+      - 'LICENSE'
+      - '**.md'
 
 permissions:
   contents: read
