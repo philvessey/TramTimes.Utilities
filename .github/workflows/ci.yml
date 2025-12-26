@@ -16,8 +16,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ github.base_ref || github.ref }}
-  cancel-in-progress: true
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
 
 jobs:
   build:
