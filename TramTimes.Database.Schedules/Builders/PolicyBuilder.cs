@@ -33,11 +33,11 @@ public static class PolicyBuilder
             .Or<TaskCanceledException>()
             .OrResult<HttpResponseMessage>(resultPredicate: response => HttpStatusTools.GetStatusCode(statusCode: response.StatusCode))
             .WaitAndRetryAsync(
-                retryCount: 3,
                 sleepDurationProvider: retryAttempt => TimeSpanTools.GetJitteredDelay(
                     baseDelay: TimeSpan.FromMilliseconds(milliseconds: 1000),
                     retryAttempt: retryAttempt,
-                    jitterRandom: _random));
+                    jitterRandom: _random),
+                retryCount: 2);
 
         #endregion
 

@@ -8,12 +8,13 @@ public static class HttpStatusTools
     {
         #region build result
 
-        var result = statusCode is HttpStatusCode.RequestTimeout or
-                                        HttpStatusCode.TooManyRequests or
-                                        HttpStatusCode.InternalServerError or
-                                        HttpStatusCode.BadGateway or
-                                        HttpStatusCode.ServiceUnavailable or
-                                        HttpStatusCode.GatewayTimeout;
+        var result = statusCode is
+            HttpStatusCode.RequestTimeout or
+            HttpStatusCode.TooManyRequests or
+            HttpStatusCode.InternalServerError or
+            HttpStatusCode.BadGateway or
+            HttpStatusCode.ServiceUnavailable or
+            HttpStatusCode.GatewayTimeout;
 
         #endregion
 
